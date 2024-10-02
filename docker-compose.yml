@@ -1,0 +1,44 @@
+services:
+  # MongoDB Service
+  mongo:
+    image: mongo:4.2.5
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+  # Backend Service (Express/Node.js)
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: nodemon server.js
+
+  # Frontend Service (React.js)
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - '3000:3000'
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    command: npm start
+
+volumes:
+  mongo-data:
