@@ -1,7 +1,10 @@
+import "./css.css"
 
 function App() {
   return (
-    <p> Hello bitches! </p>
+    <>
+
+    </>
   );
 }
 

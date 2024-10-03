@@ -13,11 +13,19 @@ const serveApp = (req, res) => {
         "X-Content-Type-Options": "nosniff",
         "Content-Type": "text/javascript"
     });
-    //Edit this
-    res.sendFile(path.join(__dirname, "../../frontend/build/static/js/main.6f7deb0c.js"));
+
+    res.sendFile(path.join(__dirname, "../../frontend/build/static/js/main.0f120cd3.js"));
+}
+const serveCSS = (req, res) => {
+    res.set({
+        "X-Content-Type-Options": "nosniff",
+        "Content-Type": "text/css"
+    });
+    res.sendFile(path.join(__dirname, "../../frontend/build/static/css/main.eaabf409.css"));
 }
 
 module.exports = {
     serveLanding,
-    serveApp
+    serveApp,
+    serveCSS
 }
