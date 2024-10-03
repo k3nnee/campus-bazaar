@@ -132,3 +132,16 @@ nav a {
   background: transparent;
   width: 300px;
 }
+<<<<<<< HEAD
+=======
+.search-input{
+    font-size: 16px;
+    font-family: 'Lexend',sans-serif;
+    color: #333;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    width: 300px;
+}
+>>>>>>> e7c597305eefbe1f313e28bd1e7580bde9432e23
