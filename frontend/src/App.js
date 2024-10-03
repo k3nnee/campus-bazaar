@@ -1,40 +1,34 @@
 import "./css.css"
 
 function App() {
-  return (
-    <>
-      <nav>
-        <div class="logo"> CB</div>
-        <div class="nav-items">
-            <a href="/"> HOME</a>
-            <a href="/"> About Us</a>
-        </div>
-    </nav>
+    return (
+        <>
+            <nav>
+                <div class="logo">CB</div>
+                <div class="nav-items">
+                    <a href="/">HOME</a>
+                    <a href= "/">LOGIN</a>
+                    <a href="/">About Us</a>
 
-    <section class="hero">
-        <div class="hero-container">
-            <div class="column-left">
-                <h1>Start Shopping Now!</h1>
-                <p>Sign UP now for free delivery on your first order</p>
+                </div>
+            </nav>
+            <div class="parent-container">
+                <div class="content">
+                    <div class="slider-wrapper">
+                        Shop For
+                        <div class="slider">
+                            <div class="slider-text1">Shoes</div>
+                            <div class="slider-text2">Cars</div>
+                            <div class="slider-text3">AIRPODS</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-container">
+                    <img src="jordans.png" alt="shoes" width="300" height="300" />
+                </div>
             </div>
-            <div class = "column-right">
-        
-            
-            </div>
-        </div>
-    </section>
-
-
-    <form>
-
-        <div class="search">
-            <input class="search-input" type="search" placeholder="Search... " />
-            <span class="search-icon material-symbols-outlined">search</span>
-
-        </div>
-    </form>
-    </>
-  );
+        </>
+    );
 }
 
 export default App;
