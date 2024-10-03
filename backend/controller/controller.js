@@ -13,6 +13,7 @@ const serveApp = (req, res) => {
         "X-Content-Type-Options": "nosniff",
         "Content-Type": "text/javascript"
     });
+    //Edit this
     res.sendFile(path.join(__dirname, "../../frontend/build/static/js/main.6f7deb0c.js"));
 }
 
