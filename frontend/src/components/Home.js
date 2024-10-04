@@ -1,3 +1,5 @@
+import "../css.css"
+
 export const Home = () => {
     return (
         <>
