@@ -1,7 +1,14 @@
-import "./css.css"
+import { BrowserRouter, Routes, Route} from "react-router-dom";
+import Home from "./components/Home"
+import Signup from "./components/Signup"
+import User_Upload from "./components/Post"
+import Navbar from "./Navbar"
+import Post from "./components/Post";
+
 
 function App() {
     return (
+<<<<<<< HEAD
         <>
             <nav>
                 <div class="logo">CB</div>
@@ -32,3 +39,21 @@ function App() {
 }
 
 export default App;
+=======
+      <>
+        <Navbar />
+        <div className="container">
+            
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/SignUp" element={<Signup />} />
+            <Route path="/User_Upload" element={<Post />} />
+          </Routes>
+        
+        </div>
+      </>
+    )
+  }
+  
+  export default App
+>>>>>>> development

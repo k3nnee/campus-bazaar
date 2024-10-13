@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "express": "^4.21.0",
+    "mongodb": "^6.9.0",
     "nodemon": "^3.1.7",
-    "react": "^18.3.1"
+    "react": "^18.3.1",
+    "react-router-dom": "^6.27.0"
   }
 }

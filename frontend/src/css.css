@@ -3,6 +3,7 @@ body {
   background-color: #efeded; 
 }
 
+<<<<<<< HEAD
 h1 {
   color: rgb(0, 187, 255);
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -10,6 +11,78 @@ h1 {
 
 p {
   color: rgb(0, 217, 255);
+=======
+  }
+  h1 {
+    color: rgb(0, 187, 255);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+  }
+  p {
+    color: rgb(0, 217, 255);
+  }
+.nav-link{
+  text-decoration: none;
+  color: white;
+  margin-right: 20px;
+ }
+  .navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; 
+    padding: 1rem;
+    
+}
+.navbar-custom {
+  background-color: #063761;
+}
+.form-inline{
+  display: flex;
+  margin-right: 1rem;
+}
+.form-inline .form-control{
+  width: 700px;
+  padding: 0.5rem;
+}
+
+.form-inline .form-control:focus {
+  border-color: #00b7ff; 
+  background-color: #e6f7ff; 
+}
+ .nav-item{
+  color: rgb(255, 255, 255);
+  text-align: justify;
+ }
+ 
+  .navbar-brand{
+     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+     letter-spacing: 0.2em;
+     margin-left: 1rem;
+     margin-right:2rem;
+     color: rgb(255, 255, 255);
+  }
+  .logo{
+    color: beige;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0 2rem;
+  }
+ 
+.search{
+    --padding: 14px;
+    width: max-content;
+    display : flex;
+    align-items : center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: #f6f6f6;
+    transition: box-shadow 0.25s;
+    margin-left: 0;
+
+}
+.search:focus-within{
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
+>>>>>>> development
 }
 
 nav {
@@ -144,4 +217,10 @@ nav a {
     background: transparent;
     width: 300px;
 }
+<<<<<<< HEAD
 >>>>>>> e7c597305eefbe1f313e28bd1e7580bde9432e23
+=======
+.upload{
+  flex-direction: column  ;
+}
+>>>>>>> development
