@@ -1,6 +1,6 @@
 import "../css.css"
 
-export const Home = () => {
+const Home = () => {
     return (
         <>
             <nav>
@@ -36,4 +36,6 @@ export const Home = () => {
         </>
     );
 }
+
+export default Home;
 

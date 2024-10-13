@@ -5,9 +5,6 @@ app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    console.log(req.url);
-
-
     if (req.url.endsWith('.css')) {
         res.setHeader('Content-Type', 'text/css');
     } else if (req.url.endsWith('.js')) {
@@ -17,6 +14,7 @@ app.use((req, res, next) => {
     }else if (req.url.endsWith('.html')) {
         res.setHeader('Content-Type', 'text/html');
     }
+
     res.setHeader('X-Content-Type-Options', 'nosniff');
     next();
 });
