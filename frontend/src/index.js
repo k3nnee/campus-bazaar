@@ -1,14 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import InfiniteFlatList from "./components/InfiniteFlatList";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css"
-import Home from "./components/Home";
+import InfiniteFlatList from "./components/InfiniteFlatList";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Home />
+      <InfiniteFlatList />
   </React.StrictMode>
 );
 

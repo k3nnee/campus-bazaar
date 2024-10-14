@@ -5,16 +5,11 @@ app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-    if (req.url.endsWith('.css')) {
-        res.setHeader('Content-Type', 'text/css');
-    } else if (req.url.endsWith('.js')) {
-        res.setHeader('Content-Type', 'text/javascript');
-    } else if (req.url === "/") {
-        res.setHeader('Content-Type', 'text/html');
-    }else if (req.url.endsWith('.html')) {
-        res.setHeader('Content-Type', 'text/html');
+    if (req.url.endsWith('.ico')) {
+        res.setHeader('Content-Type', 'image/x-icon');
     }
 
+    res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     next();
 });
