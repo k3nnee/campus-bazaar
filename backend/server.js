@@ -1,5 +1,7 @@
 express = require("express");
 path = require("path");
+require("dotenv").config()
+const {MongoClient} = require("mongodb");
 
 app = express();
 app.use(express.json());
@@ -13,9 +15,22 @@ app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     next();
 });
-app.use(express.static(path.join(__dirname,"../","frontend","build")))
+app.use(express.static(path.join(__dirname,"../","frontend","build")));
 
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
-app.listen("8080", () => {
-    console.log("Listening on port 8080");
+client.connect().then(async () => {
+    console.log("Connected to the database")
+
+    const database = client.db('myDatabase');
+    const collection = database.collection('myCollection');
+    await collection.insertOne({"testing": true})
+
+    app.listen("8080", () => {
+        console.log("Listening on port 8080");
+    })
+}).catch((e) => {
+    console.log("Error connecting to the database: " + e);
 })
+

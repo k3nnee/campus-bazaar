@@ -33,7 +33,7 @@ body {
   }
   .hero-container{
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 50% 50%;
     height: 95vh;
     padding: 3rem calc((100vw - 1300px)/2);
   }
@@ -74,4 +74,50 @@ body {
     border: none;
     background: transparent;
     width: 300px;
+}
+.column-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end; /* Aligns items to the right side */
+    color: #cb1212;
+    padding: 0rem 2rem;
+  }
+  
+  .column-right p {
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    line-height: 1.5;
+  }
+  
+.slider div{
+    color: wheat;
+    height: 50px;
+    margin-bottom: 50px;
+    padding : 2px 15px;
+    text-align: center;   
+    
+    color: #f6f6f6;
+    padding: 0rem 2rem;
+}
+.slider{
+    height: 50px;
+    padding-left: 15px;
+    overflow:hidden;
+}
+.slider-text1{
+    background: green;
+    animation: slide 5s linear infinite;
+}
+.slider-text2{
+    background: skyblue;
+}
+.slider-text3{
+    background: red;
+}
+@keyframes slide{
+    0%{margin-top: -300px;}
+    33%{margin-top: -200px;}
+    66%{margin-top: -100px;}
+    100%{margin-top: 0px;}
 }

@@ -1,4 +1,4 @@
-import "../style.css"
+import "../css/style.css"
 
 const Signup = () => {
     return (
@@ -15,5 +15,4 @@ const Signup = () => {
         </>
     )
 }
-
 export default Signup;

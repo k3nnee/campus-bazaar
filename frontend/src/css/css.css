@@ -1,0 +1,227 @@
+body {
+    color: rgb(0, 0, 0);
+    background-color: #efeded;
+}
+
+h1 {
+    color: rgb(0, 187, 255);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+p {
+    color: rgb(0, 217, 255);
+}
+
+.nav-link{
+    text-decoration: none;
+    color: white;
+    margin-right: 20px;
+}
+.navbar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; 
+    padding: 1rem;
+    
+}
+
+.navbar-custom {
+    background-color: #063761;
+}
+
+.form-inline{
+    display: flex;
+    margin-right: 1rem;
+}
+
+.form-inline .form-control{
+    width: 700px;
+    padding: 0.5rem;
+}
+
+.form-inline .form-control:focus {
+    border-color: #00b7ff;
+    background-color: #e6f7ff;
+}
+
+.nav-item{
+    color: rgb(255, 255, 255);
+    text-align: justify;
+}
+ 
+.navbar-brand{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    letter-spacing: 0.2em;
+    margin-left: 1rem;
+    margin-right:2rem;
+    color: rgb(255, 255, 255);
+}
+
+.logo{
+    color: beige;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0 2rem;
+}
+ 
+.search{
+    --padding: 14px;
+    width: max-content;
+    display : flex;
+    align-items : center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: #f6f6f6;
+    transition: box-shadow 0.25s;
+    margin-left: 0;
+
+}
+.search:focus-within{
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
+}
+
+nav {
+  height: 80px;
+  background: rgb(36, 150, 226);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0rem calc((100vw - 1300px)/2);
+}
+
+nav a {
+  text-decoration: none;
+  color: wheat;
+  padding: 0 1.5rem;
+}
+
+.logo {
+  color: beige;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0 2rem;
+}
+
+.content {
+    width: 100vw;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.parent-container{
+    margin-right: 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.slider-wrapper {
+    font-size: 40px;
+    color:#aaa;
+    font-weight: bold;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider{
+    height: 50px;
+    padding-left:15px;
+    overflow: hidden;
+}
+
+.slider-text1 {
+    background: lightgreen;
+    animation: slide 9s linear infinite;
+}
+
+.slider-text2 {
+    background: skyblue;
+}
+
+.slider-text3 {
+    background: lightcoral;
+}
+
+.slider div {
+    color:#fff;
+    height: 50px;
+    margin-bottom: 50px;
+    padding: 2px 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+@keyframes slide {
+    0% {margin-top:-300px;}
+    5% {margin-top:-200px;}  /* 5% delay */
+    33% {margin-top:-200px;}
+    38% {margin-top:-100px;} /* 5% delay */
+    66% {margin-top:-100px;}
+    71% {margin-top:0px;} /* 5% delay */
+    100% {margin-top:0px;}
+}
+
+.search-container {
+    display: flex; /* Center the search bar */
+    justify-content: center; /* Align to the center */
+    width: 100%; /* Full width to keep it centered */
+    margin: 0 auto
+}
+
+.search {
+    --padding: 14px;
+    width: max-content;
+    display: flex;
+    align-items: center;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: #f6f6f6;
+    transition: box-shadow 0.25s;
+    margin: 0px auto; /* Reduced margin for a closer position below the slider */
+}
+
+.image-container{
+    margin-right: 20px;
+    display: flex;
+    background-color: transparent;
+}
+
+.search:focus-within {
+    box-shadow: 0 0 2px rgba(5, 211, 15, 0.75);
+}
+
+.search-input {
+    font-size: 16px;
+    font-family: 'Lexend', sans-serif;
+    color: #333;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    width: 300px;
+}
+
+.search-input{
+    font-size: 16px;
+    font-family: 'Lexend',sans-serif;
+    color: #333;
+    margin-left: var(--padding);
+    outline: none;
+    border: none;
+    background: transparent;
+    width: 300px;
+}
+
+.upload{
+    flex-direction: column;
+}
+

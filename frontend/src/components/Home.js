@@ -1,41 +1,21 @@
-import "../css.css"
+import "../css/css.css";
 
 const Home = () => {
     return (
         <>
-            <nav>
-                <div class="logo"> CB </div>
-                <div class="nav-items">
-                    <a href="/"> Home </a>
-                    <a href="/"> About Us </a>
-                </div>
-            </nav>
-
-            <section class="hero">
-                <div class="hero-container">
-                    <div class="column-left">
+            <img src="https://clipart-library.com/images_k/shoe-transparent-background/shoe-transparent-background-1.jpg "></img>
+            <section className="hero">
+                <div className="hero-container">
+                    <div className="column-left">
                         <h1> Start Shopping Now! </h1>
                         <p> Sign UP now for free delivery on your first order </p>
                     </div>
-                    <div class = "column-right">
-
-
+                    <div className="column-right">
                     </div>
                 </div>
             </section>
-
-
-            <form>
-
-                <div class="search">
-                    <input class="search-input" type="search" placeholder="Search... " />
-                    <span class="search-icon material-symbols-outlined">search</span>
-
-                </div>
-            </form>
         </>
     );
-}
-
+};
 export default Home;
 
