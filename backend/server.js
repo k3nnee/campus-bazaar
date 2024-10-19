@@ -3,8 +3,8 @@ path = require("path");
 require("dotenv").config()
 const { MongoClient } = require("mongodb");
 const cors = require('cors');
-
-
+const multer = require('multer')
+const upload = multer();
 app = express();
 app.use(express.json());
 app.use(cors({
@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, "../", "frontend", "build")));
 
-const uri = "mongodb+srv://winston:superpassword@campus-bazaar.mv6nz.mongodb.net/";
+const uri = "mongodb+srv://admin:ihavealongpassword@campus-bazaar.mv6nz.mongodb.net/";;
 const client = new MongoClient(uri);
 let collection;
 client.connect().then(async () => {
@@ -34,10 +34,17 @@ client.connect().then(async () => {
     const database = client.db('myDatabase');
     const collection = database.collection('myCollection');
      
+    
 
-app.post('/', async (req, res) => {
+    app.post('/', upload.single('image'), async (req, res) => {
     const{title,body,userName} = req.body;
-    await collection.insertOne({title,body,userName})
+    const image = req.file;
+    await collection.insertOne({
+        title: title
+        ,body: body
+        ,userName: userName
+        ,image: image ? image.buffer :null
+    })
 })
     app.listen("8080", () => {
         console.log("Listening on port 8080");

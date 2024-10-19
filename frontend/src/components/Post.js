@@ -6,11 +6,12 @@ const styles = {
 }
 
 const Post = () => {
-    const[title,setTitle] = useState('');
-    const[body,setBody] = useState('')
-    const[userName,setUserName] = useState('')
+    const [title, setTitle] = useState('');
+    const [body, setBody] = useState('')
+    const [userName, setUserName] = useState('')
     const [saved, setSaved] = useState(false);
-    const [isPending,setIsPending] = useState(false)
+    const [isPending, setIsPending] = useState(false)
+    const [image, setImage] = useState('')
     const handleSave = () => {
         setSaved((prevState) => !prevState);
     }
@@ -18,37 +19,54 @@ const Post = () => {
     const handlePurchase = () => {
         console.log("Print used for placeholder")
     }
-     const [itemName, setItemName] = useState('');
+    const [itemName, setItemName] = useState('');
     const handleSubmit = (e) => {
-        e.preventDefault()
-        const post_info = {title,body,userName}
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('image', image); // Add file
+        formData.append('title', title); // Add other form fields
+        formData.append('body', body);
+        formData.append('userName', userName);
+
+        // const post_info = {title,body,userName}
+
         fetch('http://localhost:8080/', {
             method: 'POST',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(post_info),
-        }).then( () => {
+            body: formData,
+            // headers: { "Content-Type": "application/json" },
+            // body: JSON.stringify(post_info),
+        }).then(() => {
             console.log("Listing ADDED")
             setIsPending(false);
         }
 
         )
-        console.log(post_info)
+        // console.log(post_info)
     }
-    return (
-        <div className="Parent"> 
-        <h2> Create a new Listing</h2>
 
-        <form className="upload-container" onSubmit={handleSubmit}>
-            <label >ENTER YOUR ITEM NAME : </label>
-            <input type="text" id="item_name" value={title} onChange={(e) => setTitle(e.target.value)}/>
-            <label>Include a description</label>
-            <input type="text" id="body" value={body} onChange={(e) => setBody(e.target.value)}/> 
-            <label >Enter your name </label> 
-            <input type="text" id="userName" value={userName} onChange={(e) => setUserName(e.target.value)}/> 
-            {/* <button id="submit" className="submit-button">submit</button> */}
-            {!isPending && <button>UPLOAD</button>}
-            {isPending && <button disabled>UPLOADING ....</button>}
-        </form>
+    return (
+        <div className="Parent">
+            <h2> Create a new Listing</h2>
+
+            <form className="upload-container" onSubmit={handleSubmit}>
+                <label >ENTER YOUR ITEM NAME : </label>
+                <input type="text" id="item_name" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <label>Include a description</label>
+                <input type="text" id="body" value={body} onChange={(e) => setBody(e.target.value)} />
+                <label >Enter your name </label>
+                <input type="text" id="userName" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                <label>Upload a image of your item</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    name="image" // Ensure the name attribute matches the key in multer
+                />
+
+                {/* <button id="submit" className="submit-button">submit</button> */}
+                {!isPending && <button>UPLOAD</button>}
+                {isPending && <button disabled>UPLOADING ....</button>}
+            </form>
         </div>
         // <div className="card" style={styles}>
         //     <img src = "/images/placeholder.jpeg" alt = "..."></img>

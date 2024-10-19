@@ -228,5 +228,13 @@ nav a {
     display: flex;
     margin-top: 20rem;
 }
-.submit-button{
-    color: black;}
+.upload-container button {
+    color: black;
+    background-color: #00b7ff;
+}
+.upload-container text {
+    font-size: 20em;
+}
+.upload-container form{
+    margin-top: 10rem;
+}
