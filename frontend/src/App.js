@@ -3,9 +3,9 @@ import Home from "./components/Home"
 import Signup from "./components/Signup"
 import Navbar from "./components/Navbar"
 import Post from "./components/Post";
-
-
+ 
 function App() {
+  
     return (
       <>
         <Navbar />
