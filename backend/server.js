@@ -1,10 +1,17 @@
 express = require("express");
 path = require("path");
-require("dotenv").config()
-const {MongoClient} = require("mongodb");
+router = require("./utils/router.js")
+cors = require("cors")
 
 app = express();
+
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+}));
+
 app.use(express.json());
+app.use("/", router)
 
 app.use((req, res, next) => {
     if (req.url.endsWith('.ico')) {
@@ -15,22 +22,9 @@ app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     next();
 });
+
 app.use(express.static(path.join(__dirname,"../","frontend","build")));
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-
-client.connect().then(async () => {
-    console.log("Connected to the database")
-
-    const database = client.db('myDatabase');
-    const collection = database.collection('myCollection');
-    await collection.insertOne({"testing": true})
-
-    app.listen("8080", () => {
-        console.log("Listening on port 8080");
-    })
-}).catch((e) => {
-    console.log("Error connecting to the database: " + e);
+app.listen("8080", () => {
+    console.log("Listening on port 8080");
 })
-

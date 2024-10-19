@@ -30,20 +30,25 @@ export default function Navbar() {
                     </form>
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/User_Upload">
+                        <Link className="nav-link" to="/user_upload">
                             Sell
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/Signup">
-                            Create an Account
+                        <Link className="nav-link" to="/register">
+                            Register
                         </Link>
                     </li>
                     <li className="nav-item">
-                        <Link className="nav-link" to="/Home">
-                            Home
+                        <Link className="nav-link" to="/login">
+                            Login
                         </Link>
                     </li>
+                    {/*<li className="nav-item">*/}
+                    {/*    <Link className="nav-link" to="/">*/}
+                    {/*        Home*/}
+                    {/*    </Link>*/}
+                    {/*</li>*/}
                     <li className="nav-item">
                         <Link className="nav-link" to="/cart">
                             <i className="fa-solid fa-cart-shopping"></i>
