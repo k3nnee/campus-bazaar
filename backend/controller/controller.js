@@ -1,5 +1,10 @@
 //Empty controller incase we need it
 bcrypt = require("bcryptjs");
+crypto = require("crypto")
+jwt = require("jsonwebtoken")
+require("dotenv").config()
+
+const secret = process.env.JWT_SECRET_KEY;
 
 //Registration
 exports.register = async (req, res, database) => {
@@ -31,12 +36,24 @@ exports.login = async(req, res, database) =>{
         const {email, userName, password} = req.body;
         const user = await database.collection("users").findOne({email,userName});
         const isMatch = await bcrypt.compare(password, user.password);
+        const token = jwt.sign({_id: userId, userName}, secret, {expiresIn: '1hr'});
+        const hashedToken = crypto.createHash("sha256").update(token).digest('hex');
 
-        if(user == null){
-            res.send(401).json({message: "Invalid email/userName or password"});
+        if(!user){
+            return res.send(401).json({message: "Invalid email/userName or password"});
         }else if(isMatch == false){
-            res.send(401).json({message: "Invalid email/userName or password"});
+            return res.send(401).json({message: "Invalid email/userName or password"});
         }
+
+        await database.collection("users").updateOne(
+            {_id: userId},
+            {$set: hashedToken}
+        );
+
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            maxAge: 3600
+        });
 
         res.status(200).json({ message: 'Login successful' });
     

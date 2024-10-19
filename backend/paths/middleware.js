@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs/dist/bcrypt");
+
 // cookie parser
 function parseCookies(req, res, next){
     const cookieHeader = req.headers.cookies;
@@ -28,14 +30,36 @@ function passwordValidator(req, res, next){
     const isValid = password.length >= minLen && containLowerCase && containUpperCase && containSpecialChar 
                     && containNum && containSpecialChar;
 
-    if(password != null){
-        if(isValid == false){
-            res.status(400).json({message: 
-                "'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character."});
-        }
+    if(password != null && isValid == false){
+        res.status(400).json({message: 
+            "'Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character."});
     }
     
     next();
 }
 
-module.exports = {parseCookies, passwordValidator};
+async function tokenValidator(req, res, next){
+    const token = req.cookies.authToken;
+
+    if(!token){
+        res.status(401).json({message: "Authentication Required"});
+    }
+
+    try{
+        const decodedToken = jwt.verify(token, secret);
+        const userId = decodedToken.userId;
+        const user = await req.database.collection("users").findOne({_id: userId, name});
+        const isValidToken = await bcrypt.compare(token, user.hashedToken);
+
+        if(!user){
+            res.status(401).json({message: "Invalid Token"})
+        }
+
+        req.user = decodedToken;
+        next;
+    }catch (err){
+        res.status(401).json({message: "Invalid Token"})
+    }
+}
+
+module.exports = {parseCookies, passwordValidator, tokenValidator};

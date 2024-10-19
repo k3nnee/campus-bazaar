@@ -1,56 +1,56 @@
 express = require("express");
+const cors = require('cors');
 path = require("path");
-routes = require("./paths/router")
-cors = require("cors");
+require("dotenv").config()
 const {MongoClient} = require("mongodb");
+// const router = require('./paths/router.js');
+
 
 app = express();
+app.use(cors());
+// app.use('/', router);
+
+
 
 //Mongodb Setup
-const pwd = encodeURIComponent("1BH1EI65dXsKsDr4");
-const user = encodeURIComponent("Cluster30804");
-const uri = `mongodb+srv://${user}:${pwd}@campusbazaardatabase.firxl.mongodb.net/`;
+// const pwd = encodeURIComponent("1BH1EI65dXsKsDr4");
+// const user = encodeURIComponent("Cluster30804");
+// const uri = `mongodb+srv://${user}:${pwd}@campusbazaardatabase.firxl.mongodb.net/`;
 
-const client = new MongoClient(uri);
+// const client = new MongoClient(uri);
 
 app.use(express.json());
-app.use(cors());
 
-app.use("/", routes);
+
+// app.use("/", routes);
 
 app.use((req, res, next) => {
-    console.log(req.url);
-
-    if (req.url.endsWith('.css')) {
-        res.setHeader('Content-Type', 'text/css');
-    } else if (req.url.endsWith('.js')) {
-        res.setHeader('Content-Type', 'text/javascript');
-    } else if (req.url === "/") {
-        res.setHeader('Content-Type', 'text/html');
-    }else if (req.url.endsWith('.html')) {
-        res.setHeader('Content-Type', 'text/html');
+    if (req.url.endsWith('.ico')) {
+        res.setHeader('Content-Type', 'image/x-icon');
     }
+
+    res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     next();
 });
+app.use(express.static(path.join(__dirname,"../","frontend","build")));
 
-app.use(express.static(path.join(__dirname,"../","frontend","build")))
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 
-async function dbConnect(){
-    try {
-        await client.connect(); // connect to mongo_client
-        database = client.db("CampusBazaarDatabase");// utilize the database called CampusBazaarDatabase
+client.connect().then(async () => {
+    console.log("Connected to the database")
 
-        app.use("/users", router(database));
+    const database = client.db('myDatabase');
+    const router = require('./paths/router.js')(database);
+    app.use('/', router);
+    const collection = database.collection('myCollection');
+    await collection.insertOne({"testing": true})
 
-        console.log("Connected to MongoDB");
-    }catch(error){
-        console.log("Failed to connect to MongoDB",error);
-    }
-}
-
-dbConnect().then(() => {
     app.listen("8080", () => {
         console.log("Listening on port 8080");
     })
+}).catch((e) => {
+    console.log("Error connecting to the database: " + e);
 })
+

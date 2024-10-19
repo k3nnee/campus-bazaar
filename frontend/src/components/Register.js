@@ -11,6 +11,9 @@ function Register(){
         try{
             const res = await fetch("http://localhost:8080/register", {
                 method : "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: {userName, email, password}
             });
             console.log("User registered: ", res.data) 

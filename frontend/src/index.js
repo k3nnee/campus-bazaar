@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {Home} from "./components/Home"
-import Login from './components/Login';
-import Register from "./components/Register"
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-icons/font/bootstrap-icons.css"
 
-
+import { BrowserRouter } from 'react-router-dom';
+import App from "./App"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Register />
+      <BrowserRouter>
+          <App />
+      </BrowserRouter>
   </React.StrictMode>
 );
 
