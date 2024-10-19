@@ -2,7 +2,7 @@ import { Routes, Route} from "react-router-dom";
 import Home from "./components/Home"
 import Signup from "./components/Signup"
 import Navbar from "./components/Navbar"
-import Post from "./components/Post";
+import Upload from "./components/Upload";
 import Signin from "./components/Signin";
 
 
@@ -14,7 +14,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Signup />} />
-            <Route path="/user_upload" element={<Post />} />
+            <Route path="/user_upload" element={<Upload />} />
             <Route path="/login" element={<Signin />} />
           </Routes>
         </div>

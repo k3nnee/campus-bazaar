@@ -8,15 +8,12 @@ h1 {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
-p {
-    color: rgb(0, 217, 255);
-}
-
 .nav-link{
     text-decoration: none;
     color: white;
     margin-right: 20px;
 }
+
 .navbar {
     display: flex;
     justify-content: flex-start;
@@ -223,5 +220,17 @@ nav a {
 
 .upload{
     flex-direction: column;
+}
+
+.upload-container{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 20rem;
+}
+
+.submit-button{
+    color: black;
 }
 

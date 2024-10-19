@@ -5,6 +5,7 @@ isValid = require("../utils/utility.js")
 const client = require("../utils/mongoclient.js");
 const database = client.db("campus-bazaar")
 const userCollection = database.collection("user");
+const postCollection = database.collection("post");
 const crypto = require("crypto");
 
 require("dotenv").config()
@@ -64,9 +65,22 @@ const handleLogin = async (req, res) => {
         secure: "true"
     });
 
-    res.status(200).json({ message: 'Login successful'});
+    res.status(200).json({message: 'Login successful'});
+}
+
+const handleUpload = async (req, res) => {
+    const{ title, description, email } = req.body;
+    const image = req.file;
+    await postCollection.insertOne({
+        title,
+        description,
+        email,
+        image: image ? image.buffer : null
+    })
+
+    res.status(200).json({message: "Image uploaded successfully"});
 }
 
 module.exports = {
-    handleLogin, handleRegister
+    handleLogin, handleRegister, handleUpload
 }
