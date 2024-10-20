@@ -8,6 +8,7 @@ import InfiniteFlatList from "./components/InfiniteFlatList";
 
 function App() {
   
+
     return (
       <>
         <Navbar />
