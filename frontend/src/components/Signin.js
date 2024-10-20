@@ -33,7 +33,7 @@ const Signin = () => {
                 <form>
                     <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
-                    <button type="button" className="signup-btn" onClick = {onSubmit}>Sign In</button>
+                    <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign In</button>
                     <p>Don't have an account? <a href="/register">Sign up</a> </p>
                 </form>
             </div>

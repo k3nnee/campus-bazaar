@@ -1,78 +1,37 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom"
+import NavbarLink from "./NavbarLink";
 
 export default function Navbar() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light rounded-bottom navbar-custom">
-            <Link className="navbar-brand" to="/">CAMPUS BAZAAR</Link>
-            <button
-                className="navbar-toggler"
-                type="button"
-                data-toggle="collapse"
-                data-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
+        <>
+            <nav className="navbar navbar-expand-lg navbar-light navbar-custom">
+                <div className = "d-flex justify-content-between container-fluid">
+                    <Link className="navbar-brand ms-2 ps-2 me-0 pe-0" style = {{color:"white"}} to="/">CAMPUS BAZAAR</Link>
 
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav mr-auto">
-                    <form className="form-inline">
-                        <input
-                            className="form-control mr-sm-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">
-                            Search
+                    <div>
+                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
                         </button>
-                    </form>
+                    </div>
+                </div>
 
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/user_upload">
-                            Sell
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/register">
-                            Register
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/login">
-                            Login
-                        </Link>
-                    </li>
-                    {/*<li className="nav-item">*/}
-                    {/*    <Link className="nav-link" to="/">*/}
-                    {/*        Home*/}
-                    {/*    </Link>*/}
-                    {/*</li>*/}
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/cart">
-                            <i className="fa-solid fa-cart-shopping"></i>
-                        </Link>
-                    </li>
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/notifications">
-                            <i className="fa-sharp fa-solid fa-bell"></i>
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                <NavbarLink styles = "container-fluid d-flex justify-content-end d-none d-lg-flex"/>
+            </nav>
+
+            <NavbarLink styles = "collapse navbar-collapse pb-2 px-5"/>
+        </>
     )
   }
-  function CustomLink({ to, children, ...props }) {
-    const resolvedPath = useResolvedPath(to)
-    const isActive = useMatch({ path: resolvedPath.pathname, end: true })
-  
-    return (
-      <li className={isActive ? "active" : ""}>
-        <Link to={to} {...props}>
-          {children}
-        </Link>
-      </li>
-    )
-  }
+
+  // function CustomLink({ to, children, ...props }) {
+  //   const resolvedPath = useResolvedPath(to)
+  //   const isActive = useMatch({ path: resolvedPath.pathname, end: true })
+  //
+  //   return (
+  //     <li className={isActive ? "active" : ""}>
+  //       <Link to={to} {...props}>
+  //         {children}
+  //       </Link>
+  //     </li>
+  //   )
+  // }

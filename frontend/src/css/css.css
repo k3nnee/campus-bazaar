@@ -8,21 +8,18 @@ h1 {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
-p {
-    color: rgb(0, 217, 255);
-}
-
 .nav-link{
     text-decoration: none;
     color: white;
     margin-right: 20px;
 }
+
 .navbar {
     display: flex;
     justify-content: flex-start;
-    align-items: center; 
+    align-items: center;
     padding: 1rem;
-    
+
 }
 
 .navbar-custom {
@@ -48,7 +45,7 @@ p {
     color: rgb(255, 255, 255);
     text-align: justify;
 }
- 
+
 .navbar-brand{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     letter-spacing: 0.2em;
@@ -64,7 +61,7 @@ p {
     font-style: italic;
     padding: 0 2rem;
 }
- 
+
 .search{
     --padding: 14px;
     width: max-content;
@@ -199,17 +196,6 @@ nav a {
     box-shadow: 0 0 2px rgba(5, 211, 15, 0.75);
 }
 
-.search-input {
-    font-size: 16px;
-    font-family: 'Lexend', sans-serif;
-    color: #333;
-    margin-left: var(--padding);
-    outline: none;
-    border: none;
-    background: transparent;
-    width: 300px;
-}
-
 .search-input{
     font-size: 16px;
     font-family: 'Lexend',sans-serif;
@@ -223,5 +209,17 @@ nav a {
 
 .upload{
     flex-direction: column;
+}
+
+.upload-container{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-top: 20rem;
+}
+
+.submit-button{
+    color: black;
 }
 

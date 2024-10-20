@@ -6,19 +6,21 @@ body
 }
 .sign-up-form
 {
-    width: 300px;
+    max-width: 400px;
+    max-height: 400px;
     box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
     background: #fff;
-    padding: 20px;
+    padding: 40px;
     margin: 8% auto;
     text-align: center;
 }
 .log-in-form
 {
-    width: 300px;
+    max-width: 400px;
+    max-height: 400px;
     box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
     background: #fff;
-    padding: 20px;
+    padding: 40px;
     margin: 8% auto;
     text-align: center;
 }
@@ -33,15 +35,16 @@ body
 }
 .sign-up-form h1
 {
-    color: #1c8adb;
+    color: #063761;
     margin-bottom: 30px;
 }
 .log-in-form h1
 {
-    color: #1c8adb;
+    color: #063761;
     margin-bottom: 30px;
 }
-button
+
+.auth-button
 {
     color: #fff;
     width: 100%;
@@ -55,9 +58,9 @@ button
 }
 .signup-btn
 {
-    background-color: #1c8adb;;
+    background-color: #063761;
 }
 .login-btn
 {
-    background-color: #1c8adb;
+    background-color: #063761;
 }
