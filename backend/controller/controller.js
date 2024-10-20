@@ -16,7 +16,7 @@ const handleRegister = async (req, res) => {
     const {email, password} = req.body;
 
     if(!isValid(password)){
-        res.status(200).json("Not a valid password");
+        res.status(200).json({error: "Not a valid password"});
         return
     }
 
@@ -27,9 +27,9 @@ const handleRegister = async (req, res) => {
 
     if (data == null){
         await userCollection.insertOne({email, "password": hashedPassword, "token": ""});
-        res.status(200).json("User has been registered");
+        res.status(200).json({message: "User has been registered"});
     }else{
-        res.status(200).json("Email is in use");
+        res.status(200).json({error: "Email is in use"});
     }
 }
 
@@ -39,14 +39,13 @@ const handleLogin = async (req, res) => {
     const data = await userCollection.findOne({email});
 
     if (data == null) {
-        await userCollection.insertOne({email});
-        res.status(200).json("User has not been registered");
+        res.status(200).json({error: "User has not been registered"});
     }
 
     const isMatch = await bcrypt.compare(password, data.password);
 
     if (!isMatch) {
-        res.status(200).json("Incorrect password");
+        res.status(200).json({error: "Incorrect password"});
         return;
     }
 
@@ -65,7 +64,7 @@ const handleLogin = async (req, res) => {
         secure: true
     });
 
-    res.redirect("http://localhost:3000/");
+    res.status(200).json({message: "User has logged in"});
 }
 
 const handleUpload = async (req, res) => {

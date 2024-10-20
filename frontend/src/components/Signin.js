@@ -17,13 +17,24 @@ const Signin = () => {
                 body: JSON.stringify({email, password}),
                 credentials: "include"
             });
-            console.log("User registered: ", res.data)
+
+            handleResponse(await res.json());
         }catch (error){
             console.log("Registration failed", error);
         }
 
         setEmail("");
         setPassword("");
+    }
+
+    const handleResponse = async (data) => {
+        if("message" in data){
+            window.location.href = "http://localhost:3000/"
+        }else{
+            return (
+                alert(data.error)
+            )
+        }
     }
 
     return (
