@@ -1,7 +1,7 @@
-import {useState} from "react";
+import { useState } from "react";
 
 const styles = {
-    "maxWidth" : "30rem",
+    "maxWidth": "30rem",
     "height": "30rem"
 }
 
@@ -12,17 +12,13 @@ const Post = () => {
         setSaved((prevState) => !prevState);
     }
 
-    const handlePurchase = () => {
-        console.log("Print used for placeholder")
-    }
-
     return (
         <div className="card" style={styles}>
             <img src = "/images/placeholder.jpeg" alt = "..."></img>
             <div className = "d-flex justify-content-between p-2 align-items-center">
                 <h5 className = "card-title m-0"> Post title </h5>
                 <div>
-                    <button className = "btn bi bi-cart pe-1" onClick = {handlePurchase}></button>
+                    <button className = "btn bi bi-cart pe-1"></button>
                     <button className = {saved ? "btn bi bi-bookmark-check-fill" : "btn bi bi-bookmark"}
                             onClick = {handleSave}></button>
 

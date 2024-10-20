@@ -6,8 +6,8 @@ import Upload from "./components/Upload";
 import Signin from "./components/Signin";
 import InfiniteFlatList from "./components/InfiniteFlatList";
 
-
 function App() {
+  
     return (
       <>
         <Navbar />

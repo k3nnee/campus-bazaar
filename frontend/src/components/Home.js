@@ -1,6 +1,7 @@
 import "../css/css.css";
 
 const Home = () => {
+    
     return (
         <>
             <img src="https://clipart-library.com/images_k/shoe-transparent-background/shoe-transparent-background-1.jpg "></img>

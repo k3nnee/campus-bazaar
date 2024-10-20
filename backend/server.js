@@ -3,6 +3,7 @@ path = require("path");
 router = require("./utils/router.js")
 cors = require("cors")
 
+
 app = express();
 
 app.use(cors({
@@ -24,8 +25,10 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.use(express.static(path.join(__dirname,"../","frontend","build")));
 
 app.listen("8080", () => {
     console.log("Listening on port 8080");
 })
+
