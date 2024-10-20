@@ -1,30 +1,86 @@
-path = require("path");
+bcrypt = require("bcryptjs")
+jwt = require("jsonwebtoken")
+isValid = require("../utils/utility.js")
 
-const serveLanding = (req, res) => {
-    res.set({
-        "X-Content-Type-Options": "nosniff",
-        "Content-Type": "text/html"
-    });
-    res.sendFile(path.join(__dirname, "../../frontend/build/index.html"));
+const client = require("../utils/mongoclient.js");
+const database = client.db("campus-bazaar")
+const userCollection = database.collection("user");
+const postCollection = database.collection("post");
+const crypto = require("crypto");
+
+require("dotenv").config()
+const jwtSecret = process.env.JWT_SECRET_KEY;
+
+const handleRegister = async (req, res) => {
+    console.log("Register request has been received")
+    const {email, password} = req.body;
+
+    if(!isValid(password)){
+        res.status(200).json({error: "Not a valid password"});
+        return
+    }
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const data = await userCollection.findOne({email});
+
+    if (data == null){
+        await userCollection.insertOne({email, "password": hashedPassword, "token": ""});
+        res.status(200).json({message: "User has been registered"});
+    }else{
+        res.status(200).json({error: "Email is in use"});
+    }
 }
 
-const serveApp = (req, res) => {
-    res.set({
-        "X-Content-Type-Options": "nosniff",
-        "Content-Type": "text/javascript"
+const handleLogin = async (req, res) => {
+    console.log("Login request has been received")
+    const {email, password} = req.body;
+    const data = await userCollection.findOne({email});
+
+    if (data == null) {
+        res.status(200).json({error: "User has not been registered"});
+    }
+
+    const isMatch = await bcrypt.compare(password, data.password);
+
+    if (!isMatch) {
+        res.status(200).json({error: "Incorrect password"});
+        return;
+    }
+
+    const token = jwt.sign({email}, jwtSecret, {expiresIn: '1hr'});
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    await userCollection.findOneAndUpdate(
+        {email},
+        {$set: {"token": hashedToken}}
+    );
+
+    res.cookie('authToken', token, {
+        httpOnly: true,
+        expiresIn: 24 * 60 * 60 * 1000,
+        sameSite: 'None',
+        secure: true
     });
-    res.sendFile(path.join(__dirname, "../../frontend/build/static/js/main.6e62c9d7.js"));
+
+    res.status(200).json({message: "User has logged in"});
 }
-const serveCSS = (req, res) => {
-    res.set({
-        "X-Content-Type-Options": "nosniff",
-        "Content-Type": "text/css"
-    });
-    res.sendFile(path.join(__dirname, "../../frontend/build/static/css/main.eaabf409.css"));
+
+const handleUpload = async (req, res) => {
+    const{ title, description, email } = req.body;
+    const image = req.file;
+    await postCollection.insertOne({
+        title,
+        description,
+        email,
+        image: image ? image.buffer : null
+    })
+
+    res.status(200).json({message: "Image uploaded successfully"});
 }
 
 module.exports = {
-    serveLanding,
-    serveApp,
-    serveCSS
+    handleLogin, handleRegister, handleUpload
 }
+

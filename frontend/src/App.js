@@ -1,40 +1,28 @@
-import "./css.css"
+import { Routes, Route} from "react-router-dom";
+import Home from "./components/Home"
+import Signup from "./components/Signup"
+import Navbar from "./components/Navbar"
+import Upload from "./components/Upload";
+import Signin from "./components/Signin";
+import InfiniteFlatList from "./components/InfiniteFlatList";
 
 function App() {
-  return (
-    <>
-      <nav>
-        <div class="logo"> CB</div>
-        <div class="nav-items">
-            <a href="/"> HOME</a>
-            <a href="/"> About Us</a>
+  
+
+    return (
+      <>
+        <Navbar />
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<InfiniteFlatList />} />
+            <Route path="/register" element={<Signup />} />
+            <Route path="/user_upload" element={<Upload />} />
+            <Route path="/login" element={<Signin />} />
+          </Routes>
         </div>
-    </nav>
+      </>
+    )
+  }
+  
+  export default App
 
-    <section class="hero">
-        <div class="hero-container">
-            <div class="column-left">
-                <h1>Start Shopping Now!</h1>
-                <p>Sign UP now for free delivery on your first order</p>
-            </div>
-            <div class = "column-right">
-        
-            
-            </div>
-        </div>
-    </section>
-
-
-    <form>
-
-        <div class="search">
-            <input class="search-input" type="search" placeholder="Search... " />
-            <span class="search-icon material-symbols-outlined">search</span>
-
-        </div>
-    </form>
-    </>
-  );
-}
-
-export default App;
