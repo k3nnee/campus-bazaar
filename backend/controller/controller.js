@@ -62,10 +62,10 @@ const handleLogin = async (req, res) => {
         httpOnly: true,
         expiresIn: 24 * 60 * 60 * 1000,
         sameSite: 'None',
-        secure: "true"
+        secure: true
     });
 
-    res.status(200).json({message: 'Login successful'});
+    res.redirect("http://localhost:3000/");
 }
 
 const handleUpload = async (req, res) => {
