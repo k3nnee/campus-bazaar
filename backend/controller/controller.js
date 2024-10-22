@@ -1,6 +1,6 @@
-bcrypt = require("bcryptjs")
-jwt = require("jsonwebtoken")
-isValid = require("../utils/utility.js")
+bcrypt = require("bcryptjs");
+jwt = require("jsonwebtoken");
+const {passwordValidator,emailValidator} = require("../utils/utility.js");
 
 const client = require("../utils/mongoclient.js");
 const database = client.db("campus-bazaar")
@@ -15,11 +15,15 @@ const handleRegister = async (req, res) => {
     console.log("Register request has been received")
     const {email, password} = req.body;
 
-    if(!isValid(password)){
+    const isValidEmail = await emailValidator(email);
+    if(!isValidEmail){
+        res.status(200).json({error: "Not a valid email"});
+        return
+    }else if(!passwordValidator(password)){
         res.status(200).json({error: "Not a valid password"});
         return
     }
-
+    console.log(!emailValidator(email));
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -40,6 +44,7 @@ const handleLogin = async (req, res) => {
 
     if (data == null) {
         res.status(200).json({error: "User has not been registered"});
+        return
     }
 
     const isMatch = await bcrypt.compare(password, data.password);
