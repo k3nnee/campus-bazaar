@@ -26,6 +26,8 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname,"../","frontend","build")));
 
+
+
 app.listen("8080", () => {
     console.log("Listening on port 8080");
 })

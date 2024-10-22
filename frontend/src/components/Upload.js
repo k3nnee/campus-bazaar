@@ -3,6 +3,7 @@ import "../css/css.css"
 
 const Upload = () => {
     const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [isPending, setIsPending] = useState(false);
     const [image, setImage] = useState(null);
@@ -15,8 +16,9 @@ const Upload = () => {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append('image', image); // Add file
-        formData.append('title', title); // Add other form fields
+        formData.append('image', image);  
+        formData.append('title', title);  
+        formData.append('price', price)
         formData.append('description', description);
         formData.append('email', "testing@gmail.com");
 
@@ -28,6 +30,7 @@ const Upload = () => {
                 console.log("Listing added")
                 setIsPending(false);
                 setTitle('');
+                setPrice('');
                 setDescription('');
             }
         )
@@ -46,6 +49,10 @@ const Upload = () => {
                         <div className="mb-3">
                             <label htmlFor="itemName" className="form-label">Enter item name</label>
                             <input type="text" className="form-control" id="itemName" placeholder="Enter here" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="price" className="form-label">Enter Price</label>
+                            <input type="text" className="form-control" id="price" placeholder="Enter price" value={price} onChange={(e) => setPrice(e.target.value)}></input>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Enter a description</label>
