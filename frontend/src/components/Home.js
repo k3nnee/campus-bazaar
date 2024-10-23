@@ -1,20 +1,30 @@
 import "../css/css.css";
+import InfiniteFlatList from "./InfiniteFlatList";
+import {useEffect} from "react";
+import Alert from "bootstrap/js/src/alert";
+import Unauthorized from "./Unauthorized";
 
-const Home = () => {
+const Home = (prop) => {
+    useEffect(() => {
+        const getUser = async () => {
+            const res = await fetch("http://localhost:8080/getUser", {
+                method : "GET",
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const user = await res.json();
+            prop.setUser(user.user);
+        }
 
+        getUser().then(() => console.log("User fetched"));
+    }, [])
     return (
         <>
-            <img src="https://clipart-library.com/images_k/shoe-transparent-background/shoe-transparent-background-1.jpg "></img>
-            <section className="hero">
-                <div className="hero-container">
-                    <div className="column-left">
-                        <h1> Start Shopping Now! </h1>
-                        <p> Sign UP now for free delivery on your first order </p>
-                    </div>
-                    <div className="column-right">
-                    </div>
-                </div>
-            </section>
+            {
+                prop.user ? <InfiniteFlatList /> : <Unauthorized message = "Please sign in to view contents"/>
+            }
         </>
     );
 };

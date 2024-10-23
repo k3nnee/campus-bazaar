@@ -1,7 +1,7 @@
 import "../css/style.css"
 import {useState} from "react";
 
-const Signin = () => {
+const Signin = (prop) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -18,7 +18,7 @@ const Signin = () => {
                 credentials: "include"
             });
 
-            handleResponse(await res.json());
+            await handleResponse(await res.json());
         }catch (error){
             console.log("Registration failed", error);
         }
@@ -40,7 +40,7 @@ const Signin = () => {
     return (
         <>
             <div className="log-in-form">
-                <h1> Log In </h1>
+                <h1> {prop.message ? prop.message : "Sign in"} </h1>
                 <form>
                     <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>

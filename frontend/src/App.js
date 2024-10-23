@@ -2,21 +2,22 @@ import { Routes, Route} from "react-router-dom";
 import Home from "./components/Home"
 import Signup from "./components/Signup"
 import Navbar from "./components/Navbar"
-import Upload from "./components/Upload";
 import Signin from "./components/Signin";
-import InfiniteFlatList from "./components/InfiniteFlatList";
+import UploadPage from "./components/UploadPage";
+
+import {useState} from "react";
 
 function App() {
-  
+    const [user, setUser] = useState(null)
 
     return (
       <>
         <Navbar />
         <div className="container">
           <Routes>
-            <Route path="/" element={<InfiniteFlatList />} />
-            <Route path="/register" element={<Signup />} />
-            <Route path="/user_upload" element={<Upload />} />
+            <Route path="/" element={<Home user = {user} setUser = {setUser}/>}/>
+            <Route path="/register" element={<Signup user = {user} />} />
+            <Route path="/user_upload" element={<UploadPage  user = {user} />} />
             <Route path="/login" element={<Signin />} />
           </Routes>
         </div>

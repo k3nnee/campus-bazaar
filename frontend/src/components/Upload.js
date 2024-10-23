@@ -1,8 +1,9 @@
 import {useState} from "react"
 import "../css/css.css"
 
-const Upload = () => {
+const Upload = (prop) => {
     const [title, setTitle] = useState('');
+    const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
     const [isPending, setIsPending] = useState(false);
     const [image, setImage] = useState(null);
@@ -15,22 +16,36 @@ const Upload = () => {
         e.preventDefault();
 
         const formData = new FormData();
-        formData.append('image', image); // Add file
-        formData.append('title', title); // Add other form fields
+        formData.append('image', image);  
+        formData.append('title', title);  
+        formData.append('price', price)
         formData.append('description', description);
-        formData.append('email', "testing@gmail.com");
+        formData.append('email', prop.user);
 
         fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData,
             // headers: { "Content-Type": "application/json" },
-        }).then(() => {
+        }).then(async (res) => {
                 console.log("Listing added")
                 setIsPending(false);
                 setTitle('');
+                setPrice('');
                 setDescription('');
+                await handleResponse(await res.json())
             }
         )
+    }
+
+    const handleResponse = async (data) => {
+        if("message" in data){
+            alert(data.message)
+            window.location.href = "http://localhost:3000/"
+        }else{
+            return (
+                alert(data.error)
+            )
+        }
     }
 
     return (
@@ -46,6 +61,10 @@ const Upload = () => {
                         <div className="mb-3">
                             <label htmlFor="itemName" className="form-label">Enter item name</label>
                             <input type="text" className="form-control" id="itemName" placeholder="Enter here" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="price" className="form-label">Enter Price</label>
+                            <input type="text" className="form-control" id="price" placeholder="Enter price" value={price} onChange={(e) => setPrice(e.target.value)}></input>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Enter a description</label>

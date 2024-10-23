@@ -18,7 +18,7 @@ const Signup = () => {
                 body: JSON.stringify({email, password})
             });
 
-            handleResponse(await res.json());
+            await handleResponse(await res.json());
         }catch (error){
             console.log("Registration failed: ", error);
         }
