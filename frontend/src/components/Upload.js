@@ -36,7 +36,7 @@ const Upload = () => {
     };
 
     const validateDescription = (value) => {
-        if (value.length >500 || value.length < 20) {
+        if (value.length > 500 || value.length < 20) {
             setDescriptionError("*Description must be between 20-500 characters");
         } else {
             setDescriptionError(''); // Clear the error if the title is valid
@@ -45,6 +45,7 @@ const Upload = () => {
     const validateImage = () => {
         if (!image) {
             setImageError("*Please upload an image");
+            return;
         } else {
             setImageError(''); // Clear the error if the image is valid
         }
@@ -52,23 +53,31 @@ const Upload = () => {
     ////////////////////////////////////////////////////////////////////////////////////////
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (imageError || !image) {
+            return
+        }
+        validateTitle(title);
+        validatePrice(price);
+        validateDescription(description);
+       
         const newShakeFields = [];
         if (titleError) newShakeFields.push('title');
         if (priceError) newShakeFields.push('price');
         if (descriptionError) newShakeFields.push('description');
-        if (imageError) newShakeFields.push('image');
+        // if (imageError) newShakeFields.push('image');
 
         // If there are any errors, shake the inputs and prevent submission
         if (newShakeFields.length > 0) {
             setShakeFields(newShakeFields);
             setTimeout(() => {
-                setShakeFields([]); // Reset shake state after animation
-            }, 400); // Match the animation duration
-            return; // Prevent submission if there are validation errors
+                setShakeFields([]);
+            }, 400);
+            return;
         }
 
         // if (titleError || priceError || descriptionError || imageError) {
-       
+
         // }
 
         const formData = new FormData();
@@ -141,11 +150,11 @@ const Upload = () => {
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
                             <br></br>
                             <input
-                                className="form-control"
+                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''}`} 
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => { setImage(e.target.files[0]); setImageError(''); }}
+                                onChange={(e) => { setImage(e.target.files[0]);  }}
                                 name="image"
                             />
                             {imageError && <p className="text-danger">{imageError}</p>}
@@ -154,11 +163,11 @@ const Upload = () => {
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
                             <br></br>
                             <input
-                                className="form-control"
+                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''}`} 
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => setImage(e.target.files[0])}
+                                onChange={(e) => { setImage(e.target.files[0]); }}
                                 name="image"
                             />
                         </div>
