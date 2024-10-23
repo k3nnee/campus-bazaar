@@ -37,9 +37,9 @@ const InfiniteFlatList = () => {
                         <div className="my-2" key={index}>
                             <Post
                             
-                                title={item.title}
-                                price={item.price}
-                                description={item.description}
+                                title={item.sanitized_title}
+                                price={item.parsed_price}
+                                description={item.sanitized_description}
                                 imageUrl={item.imageUrl}
                             />
                         </div>

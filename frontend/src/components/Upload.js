@@ -1,4 +1,4 @@
-import {useState} from "react"
+import { useState } from "react"
 import "../css/css.css"
 
 const Upload = () => {
@@ -7,17 +7,73 @@ const Upload = () => {
     const [description, setDescription] = useState('');
     const [isPending, setIsPending] = useState(false);
     const [image, setImage] = useState(null);
+    const [titleError, setTitleError] = useState('');
+    const [priceError, setPriceError] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
+    const [imageError, setImageError] = useState('')
+    const [shakeFields, setShakeFields] = useState([]); // State for animation
+    // const handlePurchase = () => {
+    //     console.log("Print used for placeholder")
+    // }
 
-    const handlePurchase = () => {
-        console.log("Print used for placeholder")
-    }
+    //ERROR MESSAGES WHEN INPUT IS NOT CORRECT
+    const validateTitle = (value) => {
+        if (value.length < 5 || value.length > 100) {
+            setTitleError("*Title must be between 5-100 characters");
+        } else {
+            setTitleError(''); // Clear the error if the title is valid
+        }
+    };
+    const validatePrice = (value) => {
+        const parsedPrice = parseFloat(value);
+        // Check for valid positive value and two decimal places
+        const regex = /^\d+(\.\d{1,2})?$/; // Regex to match positive numbers with up to two decimal points
+        if (!regex.test(value) || parsedPrice <= 0) {
+            setPriceError("*Price must be a positive value with up to two decimal places");
+        } else {
+            setPriceError(''); // Clear the error if the price is valid
+        }
+    };
 
+    const validateDescription = (value) => {
+        if (value.length >500 || value.length < 20) {
+            setDescriptionError("*Description must be between 20-500 characters");
+        } else {
+            setDescriptionError(''); // Clear the error if the title is valid
+        }
+    };
+    const validateImage = () => {
+        if (!image) {
+            setImageError("*Please upload an image");
+        } else {
+            setImageError(''); // Clear the error if the image is valid
+        }
+    };
+    ////////////////////////////////////////////////////////////////////////////////////////
     const handleSubmit = (e) => {
         e.preventDefault();
+        const newShakeFields = [];
+        if (titleError) newShakeFields.push('title');
+        if (priceError) newShakeFields.push('price');
+        if (descriptionError) newShakeFields.push('description');
+        if (imageError) newShakeFields.push('image');
+
+        // If there are any errors, shake the inputs and prevent submission
+        if (newShakeFields.length > 0) {
+            setShakeFields(newShakeFields);
+            setTimeout(() => {
+                setShakeFields([]); // Reset shake state after animation
+            }, 400); // Match the animation duration
+            return; // Prevent submission if there are validation errors
+        }
+
+        // if (titleError || priceError || descriptionError || imageError) {
+       
+        // }
 
         const formData = new FormData();
-        formData.append('image', image);  
-        formData.append('title', title);  
+        formData.append('image', image);
+        formData.append('title', title);
         formData.append('price', price)
         formData.append('description', description);
         formData.append('email', "testing@gmail.com");
@@ -27,19 +83,19 @@ const Upload = () => {
             body: formData,
             // headers: { "Content-Type": "application/json" },
         }).then(() => {
-                console.log("Listing added")
-                setIsPending(false);
-                setTitle('');
-                setPrice('');
-                setDescription('');
-            }
+
+            setIsPending(false);
+            setTitle('');
+            setPrice('');
+            setDescription('');
+        }
         )
     }
 
     return (
         <>
             <div className="card mt-5">
-                <div className="card-header pt-3" style = {{backgroundColor : "#063761", color: "white"}}>
+                <div className="card-header pt-3" style={{ backgroundColor: "#063761", color: "white" }}>
                     <h3>
                         Uploading a post
                     </h3>
@@ -48,15 +104,38 @@ const Upload = () => {
                     <form className="w-75 mt-3" onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="itemName" className="form-label">Enter item name</label>
-                            <input type="text" className="form-control" id="itemName" placeholder="Enter here" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+                            <input
+                                type="text"
+                                className={`form-control ${shakeFields.includes('title') ? 'input-invalid' : ''}`}
+                                id="itemName"
+                                placeholder="Enter here"
+                                value={title}
+                                onChange={(e) => { setTitle(e.target.value); validateTitle(e.target.value); }}></input>
+                            {titleError && <p className="text-danger">{titleError}</p>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="price" className="form-label">Enter Price</label>
-                            <input type="text" className="form-control" id="price" placeholder="Enter price" value={price} onChange={(e) => setPrice(e.target.value)}></input>
+                            <input
+                                type="number"
+                                min="0"
+                                step={0.1}
+                                className={`form-control ${shakeFields.includes('price') ? 'input-invalid' : ''}`}
+                                id="price"
+                                placeholder="Enter price"
+                                value={price}
+                                onChange={(e) => { setPrice(e.target.value); validatePrice(e.target.value); }}></input>
+                            {priceError && <p className="text-danger">{priceError}</p>}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Enter a description</label>
-                            <textarea className="form-control" id="description" rows="4" placeholder="Enter here" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+                            <textarea
+                                className={`form-control ${shakeFields.includes('description') ? 'input-invalid' : ''}`}
+                                id="description" rows="4"
+                                placeholder="Enter here"
+                                value={description}
+                                onChange={(e) => { setDescription(e.target.value); validateDescription(e.target.value); }}></textarea>
+                            {descriptionError && <p className="text-danger">{descriptionError}</p>}
                         </div>
                         <div className="w-50 d-none d-lg-block">
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
@@ -66,9 +145,10 @@ const Upload = () => {
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) => setImage(e.target.files[0])}
-                                name="image" // Ensure the name attribute matches the key in multer
+                                onChange={(e) => { setImage(e.target.files[0]); setImageError(''); }}
+                                name="image"
                             />
+                            {imageError && <p className="text-danger">{imageError}</p>}
                         </div>
                         <div className="d-block d-lg-none">
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
@@ -79,15 +159,15 @@ const Upload = () => {
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => setImage(e.target.files[0])}
-                                name="image" // Ensure the name attribute matches the key in multer
+                                name="image"
                             />
                         </div>
-                        <div className = "container-fluid d-flex justify-content-end p-0 mt-2">
+                        <div className="container-fluid d-flex justify-content-end p-0 mt-2">
                             {
                                 !isPending ?
-                                    <button className = "btn btn-outline-secondary"> Upload post </button>
+                                    <button className="btn btn-outline-secondary"> Upload post </button>
                                     :
-                                    <button className = "btn btn-outline-secondary" disabled> Uploading ... </button>
+                                    <button className="btn btn-outline-secondary" disabled> Uploading ... </button>
                             }
                         </div>
                     </form>

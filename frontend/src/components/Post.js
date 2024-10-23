@@ -9,13 +9,14 @@ const Post = ({ title, price, description, imageUrl }) => {
     const [saved, setSaved] = useState(false);
 
     const handleSave = () => {
-        setSaved((prevState) => !prevState);
-    }
+        setSaved((prevState) => !prevState) };
+         
+    
 
     const handlePurchase = () => {
         console.log("Print used for placeholder")
     }
-
+  
 
     return (
         <div className="card" style={styles}>
