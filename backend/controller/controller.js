@@ -83,4 +83,3 @@ const handleUpload = async (req, res) => {
 module.exports = {
     handleLogin, handleRegister, handleUpload
 }
-
