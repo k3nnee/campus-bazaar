@@ -4,10 +4,8 @@ import Post from "./Post";
 const InfiniteFlatList = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     useEffect( () => {
-        // Define the async function
         const fetchPosts = async () => {
             try {
                 setLoading(true)
@@ -15,10 +13,10 @@ const InfiniteFlatList = () => {
                 if (!response.ok) {
                     throw new Error("Failed to fetch posts");
                 }
-                const posts = await response.json(); // Assuming the posts data is directly returned
+                const posts = await response.json();
                 setData(posts);
             } catch (err) {
-                setError(err.message);
+                console.log(err.message);
             } finally {
                 setLoading(false);
             }
@@ -30,31 +28,44 @@ const InfiniteFlatList = () => {
     const NoContent = () => {
         return (
             <>
-                <div className = "d-flex container-fluid justify-content-center m-5">
+                <div className = "m-5">
                     <h2> No items listed </h2>
                 </div>
             </>
         )
     }
 
+    const Spinner = () => {
+        return (
+            <div className = "position-absolute d-flex align-items-center justify-content-center vw-100 h-100 pb-5 bg-secondary-subtle">
+                <div className="spinner-border mb-5" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <div className="container-fluid d-flex justify-content-center ">
-            <div className="d-flex flex-column">
-                {
-                    data.length === 0 ? <NoContent /> : data.map((item, index) => (
-                        <div className="my-2" key={index}>
-                            <Post
-                                title={item.title}
-                                price={item.price}
-                                description={item.description}
-                                imageUrl={item.imageUrl}
-                                email={item.email}
-                            />
-                        </div>
-                    ))
-                }
+        <div>
+            <div className="container-fluid d-flex justify-content-center">
+                <div className="d-flex flex-column">
+                    {
+                        data.length === 0 ? <NoContent /> : data.map((item, index) => (
+                            <div className="my-2" key={index}>
+                                <Post
+                                    title={item.sanitized_title}
+                                    price={item.parsed_price}
+                                    description={item.sanitized_description}
+                                    imageUrl={item.imageUrl}
+                                    email={item.email}
+                                />
+                            </div>
+                        ))
+                    }
+                </div>
             </div>
         </div>
+
     
 );
 }

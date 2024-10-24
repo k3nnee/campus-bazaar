@@ -7,9 +7,10 @@ const database = client.db("campus-bazaar")
 const userCollection = database.collection("user");
 const postCollection = database.collection("post");
 const crypto = require("crypto");
-const {Timestamp} = require("mongodb");
+const sanitizeHtml = require('sanitize-html');
 
 require("dotenv").config()
+
 const jwtSecret = process.env.JWT_SECRET_KEY;
 
 const handleRegister = async (req, res) => {
@@ -24,7 +25,7 @@ const handleRegister = async (req, res) => {
         res.status(200).json({error: "Not a valid password"});
         return
     }
-    console.log(!emailValidator(email));
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -74,23 +75,55 @@ const handleLogin = async (req, res) => {
 }
 
 const handleUpload = async (req, res) => {
-    try{
-        const { title, price, description, email } = req.body;
-        const image = req.file;
-        await postCollection.insertOne({
-            title,
-            price,
-            description,
-            email,
-            image: image ? image.buffer : null,
-            createdAt: new Date()
-        })
+    const { title, price, description, email } = req.body;
+    const image = req.file;
+    //CHECK FOR EMPTY FIELDS
+    if (!title || title.trim().length === 0) { return res.status(400).json({ error: "Please include a title" }); }
+    if (!price) { return res.status(400).json({ error: "Please include a price" }) }
+    if (!description || description.trim().length === 0) { return res.status(400).json({ error: "Please include a description" }); }
+    if (!image) { return res.status(400).json({ error: "Please include a image" }) }
+    //LIMIT LENGTH OF INPUT
+    if (description.length > 500 || description.length < 20) { return res.status(400).json({ error: "Description length must be between 20 and 500 characters" }) }
+    if (title.length > 100 || title.length < 5) { return res.status(400).json({ error: "Title length must be between 5 and 20 characters" }) }
 
-        res.status(200).json({ message: "Post uploaded successfully" });
-    }catch(e){
-        res.status(404).json({ error: "Post not uploaded successfully" });
+    //SANITIZE TEXT
+    const sanitized_title = sanitizeHtml(title, {
+        allowedTags: [],
+        allowedAttributes: {}
+    })
+    const sanitized_description = sanitizeHtml(description, {
+        allowedTags: [],
+        allowedAttributes: {} //'a': ['href'] <- include this if we want users to upload links
+    })
+
+    //Only Accepting Positive Values For Price
+    const parsed_price = parseFloat(price);
+    if (isNaN(parsed_price) || parsed_price <= 0) {
+        return res.status(400).json({ error: "Invalid price value" });
     }
+    console.log("UPLOAD IS OK")
+    await postCollection.insertOne({
+        sanitized_title,
+        parsed_price,
+        sanitized_description,
+        email,
+        image: image ? image.buffer : null,
+        bookmarkCount: 0,
+        createdAt: new Date()
+    })
+    console.log("UPLOAD IS OK")
+    res.status(200).json({ message: "Image uploaded successfully" });
 }
+// const handleBookMark = async (req, res) => {
+//     const { id } = req.params;
+//     const post = await postCollection.findOne({ _id: id });
+//     const newCount = post.bookmarkCount + (req.body.saved ? 1 : -1);
+//     await postCollection.updateOne(
+//         { _id:  (id) },
+//         { $set: { bookmarkCount: newCount } }
+//     );
+
+// }
 
 const displayPost = async (req, res) => {
     try {
@@ -112,7 +145,7 @@ const handleLanding = async (req, res) => {
         const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
         const user = await userCollection.findOne({token})
 
-        if( user == null){
+        if(user == null){
             res.status(404).json({ user: null });
         }else{
             res.status(200).json({ user: user.email })

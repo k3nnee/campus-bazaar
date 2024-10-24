@@ -1,8 +1,7 @@
 import "../css/css.css";
-import InfiniteFlatList from "./InfiniteFlatList";
 import {useEffect} from "react";
-import Alert from "bootstrap/js/src/alert";
 import Unauthorized from "./Unauthorized";
+import Body from "./Body";
 
 const Home = (prop) => {
     useEffect(() => {
@@ -23,7 +22,7 @@ const Home = (prop) => {
     return (
         <>
             {
-                prop.user ? <InfiniteFlatList /> : <Unauthorized message = "Please sign in to view contents"/>
+                prop.user ? <Body /> : <Unauthorized message = "Please sign in to view contents"/>
             }
         </>
     );

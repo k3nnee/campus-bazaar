@@ -13,14 +13,13 @@ function App() {
     return (
       <>
         <Navbar />
-        <div className="container">
           <Routes>
             <Route path="/" element={<Home user = {user} setUser = {setUser}/>}/>
             <Route path="/register" element={<Signup user = {user} />} />
             <Route path="/user_upload" element={<UploadPage  user = {user} />} />
             <Route path="/login" element={<Signin />} />
           </Routes>
-        </div>
+
       </>
     )
   }
