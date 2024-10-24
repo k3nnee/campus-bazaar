@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 const styles = {
-    "maxWidth": "30rem",
+    "maxWidth": "25rem",
+    "width": "auto",
     "height": "30rem"
 }
 
@@ -9,17 +10,18 @@ const Post = ({ title, price, description, imageUrl, email }) => {
     const [saved, setSaved] = useState(false);
 
     const handleSave = () => {
-        setSaved((prevState) => !prevState);
-    }
+        setSaved((prevState) => !prevState) };
+         
+    
 
     const handlePurchase = () => {
         console.log("Print used for placeholder")
     }
-
+  
 
     return (
         <div className="card" style={styles}>
-            <img className = "h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
+            <img className = "w-100 h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
             <div className="d-flex justify-content-between p-2 align-items-center">
                 <h5 className="card-title m-0 ps-1"> {title} </h5>
                 <div>
@@ -31,7 +33,7 @@ const Post = ({ title, price, description, imageUrl, email }) => {
             </div>
             <hr className="m-0"></hr>
             <div className="card-body">
-                <h6 className="card-subtitle text-body-secondary">{price} | {email}</h6>
+                <h6 className="card-subtitle text-body-secondary">${price} | {email}</h6>
                 <p className="card-text"> {description}
                 </p>
             </div>

@@ -30,23 +30,37 @@ const InfiniteFlatList = () => {
     const NoContent = () => {
         return (
             <>
-                <div className = "d-flex container-fluid justify-content-center m-5">
+                <div className = "m-5">
                     <h2> No items listed </h2>
                 </div>
             </>
         )
     }
 
+    const Spinner = () => {
+        return (
+            <div className = "position-absolute d-flex align-items-center justify-content-center container-fluid h-100 pb-5 bg-secondary-subtle">
+                <div class="spinner-border mb-5" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="container-fluid d-flex justify-content-center ">
+            {
+                loading && <Spinner></Spinner>
+            }
             <div className="d-flex flex-column">
                 {
                     data.length === 0 ? <NoContent /> : data.map((item, index) => (
                         <div className="my-2" key={index}>
                             <Post
-                                title={item.title}
-                                price={item.price}
-                                description={item.description}
+                            
+                                title={item.sanitized_title}
+                                price={item.parsed_price}
+                                description={item.sanitized_description}
                                 imageUrl={item.imageUrl}
                                 email={item.email}
                             />

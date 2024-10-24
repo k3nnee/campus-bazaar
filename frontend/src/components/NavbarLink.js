@@ -29,11 +29,12 @@ const NavbarLink = (prop) => {
                         <i className="fa-sharp fa-solid fa-bell"></i>
                     </Link>
                 </li>
-
-                <form className="d-flex" role="search">
-                    <input className="form-control mx-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button className="btn btn-outline-light" type="submit"> Search </button>
-                </form>
+                <div className="container-fluid d-flex justify-content-center">
+                    <form className="d-flex" style = {{width: "20rem"}} role="search">
+                        <input className="form-control mx-2" type="search" placeholder="Search" aria-label="Search" />
+                        <button className="btn btn-outline-light" type="submit"> Search </button>
+                    </form>
+                </div>
             </ul>
         </div>
     )
