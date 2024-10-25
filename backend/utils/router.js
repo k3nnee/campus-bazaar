@@ -9,6 +9,7 @@ const upload = multer();
 
 router.post("/register", controller.handleRegister);
 router.post("/login", controller.handleLogin);
+router.post("/logout", controller.handleLogout);
 router.post("/upload", upload.single("image") ,controller.handleUpload);
 
 

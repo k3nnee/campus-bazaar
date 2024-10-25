@@ -80,7 +80,29 @@ const handleUpload = async (req, res) => {
     res.status(200).json({message: "Image uploaded successfully"});
 }
 
+const handleLogout = async (req, res) => {
+    console.log("Logout request has been recieved")
+
+    //clear Authtoken cookie
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    });
+
+    //Remove token from database
+    const {email} = req.body;
+    if (email) {
+        await userCollection.findOneAndUpdate(
+            {email},
+            { $set: {"token": ""} } //Clear token from database
+        );
+    }
+
+    res.status(200).json({ message: "User has logged out"})
+};
+
 module.exports = {
-    handleLogin, handleRegister, handleUpload
+    handleLogin, handleRegister, handleUpload, handleLogout
 }
 

@@ -20,6 +20,11 @@ const NavbarLink = (prop) => {
                     </Link>
                 </li>
                 <li className="nav-item d-flex justify-content-center">
+                    <Link className="nav-link" to="/logout">
+                        Logout
+                    </Link>
+                </li>
+                <li className="nav-item d-flex justify-content-center">
                     <Link className="nav-link" to="/cart">
                         <i className="fa-solid fa-cart-shopping"></i>
                     </Link>
