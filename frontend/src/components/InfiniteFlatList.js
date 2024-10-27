@@ -53,6 +53,7 @@ const InfiniteFlatList = () => {
                         data.length === 0 ? <NoContent /> : data.map((item, index) => (
                             <div className="my-2" key={index}>
                                 <Post
+                                    id={item.id}
                                     title={item.sanitized_title}
                                     price={item.parsed_price}
                                     description={item.sanitized_description}

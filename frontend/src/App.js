@@ -4,6 +4,7 @@ import Signup from "./components/Signup"
 import Navbar from "./components/Navbar"
 import Signin from "./components/Signin";
 import UploadPage from "./components/UploadPage";
+import Profile from "./components/Profile";
 
 import {useState} from "react";
 
@@ -18,6 +19,7 @@ function App() {
             <Route path="/register" element={<Signup user = {user} />} />
             <Route path="/user_upload" element={<UploadPage  user = {user} />} />
             <Route path="/login" element={<Signin />} />
+            {/* <Route path="/profile" element={<Profile />} /> */}
           </Routes>
 
       </>

@@ -14,6 +14,7 @@ router.post("/register", controller.handleRegister);
 router.post("/login", controller.handleLogin);
 router.post("/upload", upload.single("image"), controller.handleUpload);
 router.get("/getUser", controller.handleLanding);
+router.delete("/:id", controller.handleDeletePost);
 
 
 module.exports = router;

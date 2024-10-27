@@ -8,6 +8,7 @@ const userCollection = database.collection("user");
 const postCollection = database.collection("post");
 const crypto = require("crypto");
 const sanitizeHtml = require('sanitize-html');
+const {ObjectId} = require("mongodb")
 
 require("dotenv").config()
 
@@ -66,7 +67,7 @@ const handleLogin = async (req, res) => {
 
     res.cookie('authToken', token, {
         httpOnly: true,
-        expiresIn: 24 * 60 * 60 * 1000,
+        expiresIn: 60 * 60 * 1000,
         sameSite: 'None',
         secure: true
     });
@@ -103,7 +104,7 @@ const handleUpload = async (req, res) => {
     }
     console.log("UPLOAD IS OK")
     await postCollection.insertOne({
-        sanitized_title,
+        sanitized_title7,
         parsed_price,
         sanitized_description,
         email,
@@ -112,7 +113,7 @@ const handleUpload = async (req, res) => {
         createdAt: new Date()
     })
     console.log("UPLOAD IS OK")
-    res.status(200).json({ message: "Image uploaded successfully" });
+    res.status(200).json({ message: "Image uploaded successfully"});
 }
 // const handleBookMark = async (req, res) => {
 //     const { id } = req.params;
@@ -130,8 +131,10 @@ const displayPost = async (req, res) => {
         const posts = await postCollection.find().sort({"createdAt": -1}).toArray();
         const formattedPosts = posts.map(post => ({
             ...post,
+            id: post._id,
             imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null
         }));
+        console.log("display cookies", req.cookies)
         res.status(200).json(formattedPosts);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -144,7 +147,7 @@ const handleLanding = async (req, res) => {
     } else {
         const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
         const user = await userCollection.findOne({token})
-
+        console.log("landing cookies", req.cookies)
         if(user == null){
             res.status(404).json({ user: null });
         }else{
@@ -153,7 +156,65 @@ const handleLanding = async (req, res) => {
     }
 }
 
+const handleDeletePost = async (req, res) => {
+    try {
+    
+        if( !("authToken" in req.cookies )){
+            console.log("Cookies available:", req.cookies);
+            return res.status(401).json({ message: "Authentication required" });
+        }
+
+        const {id} = req.params;
+        const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+        console.log("hashed token ", token);
+
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid ID format" });
+        }
+
+        const objId = new ObjectId(id);
+
+    
+        const postUser = await postCollection.findOne({_id: objId});
+        const userEmail = postUser['email'];
+        const user = await userCollection.findOne({'email': userEmail});
+        const userToken = user['token'];
+        console.log("user token ", userToken);
+        
+
+        if (userToken == token){
+            const deleted = await postCollection.deleteOne({_id: objId});
+            if (deleted.deletedCount === 0) {
+                return res.status(404).json({ message: "Post not found" });
+            }
+            res.status(200).json({ message: "Post successfully deleted" });
+        }else{
+
+            res.status(403).json({ message: "Unable to Delete Other People Posts" });
+        }
+        
+        /*
+        const {id} = req.params;
+        if (!ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid ID format" });
+        }
+
+        const objId = new ObjectId(id);
+
+        const deleted = await postCollection.deleteOne({_id: objId});
+        if (deleted.deletedCount === 0) {
+            return res.status(404).json({ message: "Post not found" });
+        }
+        res.status(200).json({ message: "Post successfully deleted" });
+        */
+
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting post", error: error.toString() });
+    }
+
+}
+
 module.exports = {
-    handleLogin, handleRegister, handleUpload, displayPost, handleLanding
+    handleLogin, handleRegister, handleUpload, displayPost, handleLanding, handleDeletePost
 }
 
