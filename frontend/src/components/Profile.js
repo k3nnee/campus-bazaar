@@ -2,20 +2,20 @@ import { useState } from "react"
 import "../css/css.css"
 
 const Profile = (prop) => {
-    const [email, setEmail] = useState(''); // Placeholder email, replace with actual email from backend or context
+    const [email, setEmail] = useState('');  
     const [profileImage, setProfileImage] = useState(null);
     const [imagePreview, setImagePreview] = useState('');
     const [isPending, setIsPending] = useState(false);
     const [image, setImage] = useState(null);
     const [imageError, setImageError] = useState('')
-    const [shakeFields, setShakeFields] = useState([]); // State for animation
+    const [shakeFields, setShakeFields] = useState([]);  
 
     const validateImage = () => {
         if (!image) {
             setImageError("*Please upload an image");
             return;
         } else {
-            setImageError(''); // Clear the error if the image is valid
+            setImageError('');  
         }
     };
 

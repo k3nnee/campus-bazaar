@@ -59,6 +59,7 @@ const InfiniteFlatList = () => {
                                     description={item.sanitized_description}
                                     imageUrl={item.imageUrl}
                                     email={item.email}
+                                    bookmarkedBy = {item.bookmarkedBy}
                                 />
                             </div>
                         ))

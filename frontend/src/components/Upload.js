@@ -11,24 +11,22 @@ const Upload = (prop) => {
     const [priceError, setPriceError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
     const [imageError, setImageError] = useState('')
-    const [shakeFields, setShakeFields] = useState([]); // State for animation
+    const [shakeFields, setShakeFields] = useState([]); 
 
     //ERROR MESSAGES WHEN INPUT IS NOT CORRECT
     const validateTitle = (value) => {
         if (value.length < 5 || value.length > 100) {
             setTitleError("*Title must be between 5-100 characters");
         } else {
-            setTitleError(''); // Clear the error if the title is valid
+            setTitleError(''); 
         }
     };
     const validatePrice = (value) => {
         const parsedPrice = parseFloat(value);
-        // Check for valid positive value and two decimal places
-        const regex = /^\d+(\.\d{1,2})?$/; // Regex to match positive numbers with up to two decimal points
-        if (!regex.test(value) || parsedPrice <= 0) {
+        if (parsedPrice <= 0) {
             setPriceError("*Price must be a positive value with up to two decimal places");
         } else {
-            setPriceError(''); // Clear the error if the price is valid
+            setPriceError(''); 
         }
     };
 
@@ -36,7 +34,7 @@ const Upload = (prop) => {
         if (value.length > 500 || value.length < 20) {
             setDescriptionError("*Description must be between 20-500 characters");
         } else {
-            setDescriptionError(''); // Clear the error if the title is valid
+            setDescriptionError(''); 
         }
     };
     const validateImage = () => {
@@ -44,7 +42,7 @@ const Upload = (prop) => {
             setImageError("*Please upload an image");
             return;
         } else {
-            setImageError(''); // Clear the error if the image is valid
+            setImageError(''); 
         }
     };
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +62,6 @@ const Upload = (prop) => {
         if (descriptionError) newShakeFields.push('description');
         // if (imageError) newShakeFields.push('image');
 
-        // If there are any errors, shake the inputs and prevent submission
         if (newShakeFields.length > 0) {
             setShakeFields(newShakeFields);
             setTimeout(() => {
@@ -87,7 +84,6 @@ const Upload = (prop) => {
         fetch('http://localhost:8080/upload', {
             method: 'POST',
             body: formData,
-            // headers: { "Content-Type": "application/json" },
         }).then(async (res) => {
                 console.log("Listing added")
                 setIsPending(false);
