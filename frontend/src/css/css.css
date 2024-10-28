@@ -3,8 +3,14 @@ body {
     background-color: rgb(255, 255, 255);
 }
 
-h1 {
+h1{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card-custom:hover{
+    border: 1px solid rgb(100, 100, 100);
+    cursor: pointer;
+    transition: .5s;
 }
 
 .nav-link{

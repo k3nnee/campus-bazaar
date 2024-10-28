@@ -3,12 +3,10 @@ import { useState } from "react";
 const styles = {
     "maxWidth": "25rem",
     "width": "auto",
-    "height": "30rem",
-    border: "1px solid",
-    borderColor: "rgb(200,200,200)"
+    "height": "30rem"
 }
 
-const Post = ({ title, price, description, imageUrl, email }) => {
+const Post = ({ title, imageUrl, email, handleClick, index}) => {
     const [saved, setSaved] = useState(false);
 
     const handleSave = () => {
@@ -22,7 +20,7 @@ const Post = ({ title, price, description, imageUrl, email }) => {
   
 
     return (
-        <div className="card mb-0" style={styles}>
+        <div className="card-custom card mb-0" style={styles} onClick={() => handleClick(index)}>
             <div className = "container-fluid ps-3 my-2">
                 <p className = "m-1"> {email} </p>
             </div>
@@ -37,7 +35,7 @@ const Post = ({ title, price, description, imageUrl, email }) => {
                         onClick={handleSave}></button>
 
                 </div>
-            </div>
+            </div>`
             {/*<hr className="m-0"></hr>*/}
             {/*<div className="card-body">*/}
             {/*    <h6 className="card-subtitle text-body-secondary">${price}</h6>*/}
