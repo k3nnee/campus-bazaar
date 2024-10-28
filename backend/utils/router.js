@@ -1,4 +1,4 @@
-const { displayPost } = require("../controller/controller.js");
+const { displayPost, handleGetBookmarkCount } = require("../controller/controller.js");
 
 //Empty router incase we need it
 express = require("express")
@@ -14,6 +14,7 @@ router.post("/register", controller.handleRegister);
 router.post("/login", controller.handleLogin);
 router.post("/upload", upload.single("image"), controller.handleUpload);
 router.get("/getUser", controller.handleLanding);
-
-
+router.delete("/:id", controller.handleDeletePost);
+router.post("/:id/bookmark",controller.handleBookmark);
+router.get('/:id/bookmark-count', handleGetBookmarkCount);
 module.exports = router;

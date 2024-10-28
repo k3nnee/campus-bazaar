@@ -20,11 +20,13 @@ const InfiniteFlatList = ({data, setHighlight}) => {
                         data.map((item, index) => (
                             <div className="my-2" key={index}>
                                 <Post
+                                    id={item.id}
                                     title={item.sanitized_title}
                                     imageUrl={item.imageUrl}
                                     email={item.email}
                                     handleClick = {setHighlight}
                                     index = {index}
+                                    bookmarkedBy = {item.bookmarkedBy}
                                 />
                             </div>
                         ))

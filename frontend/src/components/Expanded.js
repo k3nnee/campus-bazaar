@@ -15,7 +15,6 @@ const Expanded = ({ title, price, description, imageUrl, email}) => {
                     <hr className = "mt-0"></hr>
                     <button className="btn btn-outline-secondary mb-1 w-100"> Add to cart </button>
                     <br></br>
-                    <button className="btn btn-outline-secondary w-100"> Bookmark </button>
                 </div>
             </div>
 
