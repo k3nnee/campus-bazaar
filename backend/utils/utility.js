@@ -5,7 +5,9 @@ function passwordValidator(password){
     const containUpperCase = /[A-Z]/.test(password);
     const containLowerCase = /[a-z]/.test(password);
     const containNum = /\d/.test(password);
-    const containSpecialChar = /[!@#$%^&.*(),.?":{}|<>-_]/.test(password);
+    const containSpecialChar = /[!@#$%^&.*(),?":{}|<>_]/.test(password);
+    console.log("__",password,"__")
+    console.log(containSpecialChar)
 
     const isValid = password.length >= minLen && containLowerCase && containUpperCase && containSpecialChar
         && containNum && containSpecialChar;

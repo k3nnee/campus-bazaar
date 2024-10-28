@@ -46,6 +46,7 @@ const Signin = (prop) => {
                     <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
                     <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign In</button>
+                    <p>Don't Have an Account? <a href="/register">Sign Up</a> </p>
                 </form>
             </div>
         </>
