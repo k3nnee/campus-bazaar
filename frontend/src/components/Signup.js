@@ -50,6 +50,7 @@ const Signup = () => {
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Confirm Password" value = {passwordDupe} onChange = {e => setPasswordDupe(e.target.value)}/>
                     <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign Up</button>
+                    <p>Already have an account? <a href="/login">Log In</a> </p>
                 </form>
             </div>
         </>
