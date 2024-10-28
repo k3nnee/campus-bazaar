@@ -15,6 +15,14 @@ RUN npm install -g nodemon
 # Copy the rest of the application code into the working directory
 COPY . .
 
+WORKDIR /app/frontend
+
+RUN npm install
+
+RUN npm run build
+
+WORKDIR /app
+
 # Expose the port the application will run on
 EXPOSE 8080
 

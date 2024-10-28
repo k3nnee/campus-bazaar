@@ -18,7 +18,7 @@ const Signin = (prop) => {
                 credentials: "include"
             });
 
-            await handleResponse(await res.json());
+            handleResponse(await res.json());
         }catch (error){
             console.log("Registration failed", error);
         }
@@ -27,9 +27,10 @@ const Signin = (prop) => {
         setPassword("");
     }
 
-    const handleResponse = async (data) => {
+    const handleResponse = (data) => {
         if("message" in data){
-            window.location.href = "http://localhost:3000/"
+            window.location.href = "http://localhost:8080/"
+            alert("Logged in successfully")
         }else{
             return (
                 alert(data.error)
@@ -45,7 +46,6 @@ const Signin = (prop) => {
                     <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
                     <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign In</button>
-                    <p>Don't have an account? <a href="/register">Sign up</a> </p>
                 </form>
             </div>
         </>

@@ -16,14 +16,21 @@ const jwtSecret = process.env.JWT_SECRET_KEY;
 
 const handleRegister = async (req, res) => {
     console.log("Register request has been received")
-    const { email, password } = req.body;
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const { email, password, passwordDupe } = req.body;
 
     const isValidEmail = await emailValidator(email);
     if (!isValidEmail) {
-        res.status(200).json({ error: "Not a valid email" });
+        res.status(400).json({ error: "Not a valid email" });
         return
     } else if (!passwordValidator(password)) {
-        res.status(200).json({ error: "Not a valid password" });
+        res.status(400).json({ error: "Not a valid password" });
+        return
+    }
+
+    if(password != passwordDupe){
+        res.status(400).json({ error: "Passwords must match" });
         return
     }
 
@@ -33,27 +40,28 @@ const handleRegister = async (req, res) => {
     const data = await userCollection.findOne({ email });
 
     if (data == null) {
-        await userCollection.insertOne({ email, "password": hashedPassword, "token": "" });
+        await userCollection.insertOne({ email, "password": hashedPassword});
         res.status(200).json({ message: "User has been registered" });
     } else {
-        res.status(200).json({ error: "Email is in use" });
+        res.status(401).json({ error: "Email is in use" });
     }
 }
 
 const handleLogin = async (req, res) => {
     console.log("Login request has been received")
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     const { email, password } = req.body;
     const data = await userCollection.findOne({ email });
 
     if (data == null) {
-        res.status(200).json({ error: "User has not been registered" });
+        res.status(400).json({ error: "User has not been registered" });
         return
     }
 
     const isMatch = await bcrypt.compare(password, data.password);
-
     if (!isMatch) {
-        res.status(200).json({ error: "Incorrect password" });
+        res.status(401).json({ error: "Incorrect password" });
         return;
     }
 
@@ -76,7 +84,9 @@ const handleLogin = async (req, res) => {
 }
 
 const handleUpload = async (req, res) => {
-     const { title, price, description, email } = req.body;
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const { title, price, description, email } = req.body;
     const image = req.file;
     //CHECK FOR EMPTY FIELDS
     if (!title || title.trim().length === 0) { return res.status(400).json({ error: "Please include a title" }); }
@@ -119,6 +129,8 @@ const handleUpload = async (req, res) => {
 
 
 const displayPost = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     try {
         const posts = await postCollection.find().sort({ "createdAt": -1 }).toArray();
         const formattedPosts = posts.map(post => ({
@@ -126,7 +138,6 @@ const displayPost = async (req, res) => {
             id: post._id,
             imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null
         }));
-        console.log("display cookies", req.cookies)
         res.status(200).json(formattedPosts);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -134,6 +145,8 @@ const displayPost = async (req, res) => {
 }
 
 const handleLanding = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     if (!("authToken" in req.cookies)) {
         res.status(404).json({ user: null });
     } else {
@@ -149,6 +162,8 @@ const handleLanding = async (req, res) => {
 }
 
 const handleDeletePost = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     try {
 
         if (!("authToken" in req.cookies)) {
@@ -179,13 +194,11 @@ const handleDeletePost = async (req, res) => {
             if (deleted.deletedCount === 0) {
                 return res.status(404).json({ message: "Post not found" });
             }
-            res.status(200).json({ message: "Post successfully deleted" });
+            res.status(204).json({ message: "Post successfully deleted" });
         } else {
 
             res.status(403).json({ message: "Unable to Delete Other People Posts" });
         }
-
-
     } catch (error) {
         res.status(500).json({ message: "Error deleting post", error: error.toString() });
     }
@@ -193,27 +206,26 @@ const handleDeletePost = async (req, res) => {
 }
  
 const handleBookmark = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     console.log("REQBODYL:",req.body)
     const { id } = req.params;
     console.log("id:",id)
-    // const {email} = req.body;
-
     console.log("HEOHJASDIAHNFUGBHISf")
-   /////////////FIND CURRENT USER ///////////////////////
-   
-   const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
-   console.log("hashed token ", token);
-   const curr_user = await userCollection.findOne({token});
-   console.log("Current User is :", curr_user.email)
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    console.log("hashed token ", token);
 
+    const curr_user = await userCollection.findOne({token});
 
-   const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    console.log("Current User is :", curr_user.email)
+
+    const post = await postCollection.findOne({ _id: new ObjectId(id) });
 
      
-const alreadyBookmarked = post.bookmarkedBy.includes(curr_user.email);
-console.log("BOOKMARK STATUS:", alreadyBookmarked)
-console.log("Current User Email:", curr_user.email);
-console.log("Bookmarked By Array:", post.bookmarkedBy);
+    const alreadyBookmarked = post.bookmarkedBy.includes(curr_user.email);
+    console.log("BOOKMARK STATUS:", alreadyBookmarked)
+    console.log("Current User Email:", curr_user.email);
+    console.log("Bookmarked By Array:", post.bookmarkedBy);
     if (alreadyBookmarked) {
         await postCollection.updateOne(
             { _id: new ObjectId(id) },
@@ -234,21 +246,52 @@ console.log("Bookmarked By Array:", post.bookmarkedBy);
      const updatedPost = await postCollection.findOne({ _id: new ObjectId(id) });
      return res.status(200).json({ message: alreadyBookmarked ? "Post Unmarked" : "Post Saved", bookmarkCount: updatedPost.bookmarkCount });
 };
+
 const handleGetBookmarkCount = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     const { id } = req.params;
 
-        const post = await postCollection.findOne({ _id: new ObjectId(id) });
-        const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
-        const curr_user = await userCollection.findOne({ token });
-        const isBookmarked = post.bookmarkedBy.includes(curr_user.email);
-        return res.status(200).json({
-            bookmarkCount: post.bookmarkCount,
-            isBookmarked
-        });
-   
+    const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    const curr_user = await userCollection.findOne({ token });
+    const isBookmarked = post.bookmarkedBy.includes(curr_user.email);
+    return res.status(200).json({
+        bookmarkCount: post.bookmarkCount,
+        isBookmarked
+    });
+};
+
+const handleLogout = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        sameSite: 'None',
+        secure: true
+    });
+
+    const {email} = req.body;
+    console.log(email)
+    if (email) {
+        const x = await userCollection.updateOne(
+            {email},
+            { $unset: {token: ""}} //Clear token from database
+        );
+        console.log(x)
+    }
+    res.status(200).json({ message: "User has logged out"})
 };
 
 module.exports = {
-    handleLogin, handleRegister, handleUpload, displayPost, handleLanding, handleDeletePost, handleBookmark,handleGetBookmarkCount,
+    handleLogin,
+    handleRegister,
+    handleUpload,
+    displayPost,
+    handleLanding,
+    handleDeletePost,
+    handleBookmark,
+    handleGetBookmarkCount,
+    handleLogout
 }
 

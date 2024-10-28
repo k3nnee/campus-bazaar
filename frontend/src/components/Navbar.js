@@ -1,7 +1,24 @@
 import { Link } from "react-router-dom"
 import NavbarLink from "./NavbarLink";
+import {useEffect} from "react";
 
-export default function Navbar() {
+export default function Navbar({user, setUser}) {
+    useEffect(() => {
+        const getUser = async () => {
+            const res = await fetch("http://localhost:8080/getUser", {
+                method : "GET",
+                credentials: "include",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const user = await res.json();
+            setUser(user.user);
+        }
+
+        getUser().then(() => console.log("User fetched"));
+    }, [])
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-light navbar-custom">
@@ -15,10 +32,10 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                <NavbarLink styles = "container-fluid d-flex justify-content-end d-none d-lg-flex"/>
+                <NavbarLink user = {user} styles = "container-fluid d-flex justify-content-end d-none d-lg-flex"/>
             </nav>
 
-            <NavbarLink styles = "collapse navbar-collapse pb-2 px-5"/>
+            <NavbarLink user = {user} styles = "collapse navbar-collapse pb-2 px-5"/>
         </>
     )
   }

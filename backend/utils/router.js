@@ -17,4 +17,6 @@ router.get("/getUser", controller.handleLanding);
 router.delete("/:id", controller.handleDeletePost);
 router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
+router.post("/logout", controller.handleLogout);
+
 module.exports = router;

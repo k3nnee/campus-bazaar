@@ -98,7 +98,7 @@ const Upload = (prop) => {
     const handleResponse = async (data) => {
         if("message" in data){
             alert(data.message)
-            window.location.href = "http://localhost:3000/"
+            window.location.href = "http://localhost:8080/"
         }else{
             return (
                 alert(data.error)
