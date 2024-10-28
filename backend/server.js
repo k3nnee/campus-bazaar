@@ -2,6 +2,7 @@ express = require("express");
 path = require("path");
 router = require("./utils/router.js")
 cors = require("cors")
+cookieParser = require("cookie-parser")
 
 app = express();
 
@@ -10,6 +11,7 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use(cookieParser())
 app.use(express.json());
 app.use("/", router)
 
@@ -25,8 +27,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static(path.join(__dirname,"../","frontend","build")));
-
-
 
 app.listen("8080", () => {
     console.log("Listening on port 8080");

@@ -1,7 +1,7 @@
 import "../css/style.css"
 import {useState} from "react";
 
-const Signin = () => {
+const Signin = (prop) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -27,9 +27,10 @@ const Signin = () => {
         setPassword("");
     }
 
-    const handleResponse = async (data) => {
+    const handleResponse = (data) => {
         if("message" in data){
-            window.location.href = "http://localhost:3000/"
+            window.location.href = "http://localhost:8080/"
+            alert("Logged in successfully")
         }else{
             return (
                 alert(data.error)
@@ -40,12 +41,11 @@ const Signin = () => {
     return (
         <>
             <div className="log-in-form">
-                <h1> Log In </h1>
+                <h1> {prop.message ? prop.message : "Sign in"} </h1>
                 <form>
                     <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
                     <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
                     <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign In</button>
-                    <p>Don't have an account? <a href="/register">Sign up</a> </p>
                 </form>
             </div>
         </>

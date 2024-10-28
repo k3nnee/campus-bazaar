@@ -1,11 +1,16 @@
 body {
     color: rgb(0, 0, 0);
-    background-color: #efeded;
+    background-color: rgb(255, 255, 255);
 }
 
-h1 {
-    color: rgb(0, 187, 255);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+h1{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card-custom:hover{
+    border: 1px solid rgb(100, 100, 100);
+    cursor: pointer;
+    transition: .5s;
 }
 
 .nav-link{
@@ -221,4 +226,12 @@ nav a {
 
 .submit-button{
     color: black;
+}
+.input-invalid{
+    animation: shake .4s;
+}
+@keyframes shake{
+    20%{transform: translate(3px);}
+    60%{transform: translate(-5px);}
+    75%{transform: translate(3px);}
 }
