@@ -27,6 +27,7 @@ const InfiniteFlatList = ({data, setHighlight}) => {
                                     handleClick = {setHighlight}
                                     index = {index}
                                     bookmarkedBy = {item.bookmarkedBy}
+                                    profilePic_url={item.profilePic_url}
                                 />
                             </div>
                         ))

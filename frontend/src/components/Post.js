@@ -7,7 +7,7 @@ const styles = {
 }
 
 
-const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
+const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url}) => {
     const [saved, setSaved] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
     const [bookmarkCount, setBookmarkCount] = useState(0);
@@ -91,12 +91,12 @@ const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
     if (isDeleted) {
         return null;
     }
-
+    console.log("profilepic: ", profilePic_url);
     return (
         <div className="card-custom card mb-0" style={styles} onClick={() => handleClick(index)}>
             <div className="container-fluid ps-3 my-2 d-flex justify-content-between">
                 <p className="m-1 text-start">
-                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src="/images/default_profile.jpg" className="rounded-circle me-2 border " />
+                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src={profilePic_url || "/images/default_profile.jpg"} alt={email} className="rounded-circle me-2 border " />
                     {email}</p>
                 <div className="dropdown-delete d-flex justify-content-center">
                     <button
