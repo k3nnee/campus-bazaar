@@ -4,25 +4,39 @@ import Signup from "./components/Signup"
 import Navbar from "./components/Navbar"
 import Signin from "./components/Signin";
 import UploadPage from "./components/UploadPage";
-import Profile from "./components/Profile";
+import ProfilePage from "./components/Profile";
 
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 function App() {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState(null);
+    const [isDark, setIsDark] = useState(false);
+
+    useEffect(() => {
+      const storedMode = (localStorage.getItem('isDark') == 'true');
+      setIsDark(storedMode);
+    }, []);
+
+    const toggleDarkMode = () => {
+      setIsDark((prevMode) => {
+          const newMode = !prevMode;
+          localStorage.setItem('isDark', newMode); 
+          return newMode;
+      });
+  };
 
     return (
-      <>
-        <Navbar user = {user} setUser = {setUser}/>
+      <div className={isDark ? "dark-mode" : "light-mode"}>
+        <Navbar user = {user} setUser = {setUser} toggleDarkMode={toggleDarkMode} isDark={isDark}/>
           <Routes>
             <Route path="/" element={<Home user = {user}/>}/>
             <Route path="/register" element={<Signup user = {user} />} />
             <Route path="/user_upload" element={<UploadPage  user = {user} />} />
             <Route path="/login" element={<Signin />} />
-            {/* <Route path="/profile" element={<Profile />} /> */}
+            <Route path="/user_profile" element={<ProfilePage user = {user} />} />
           </Routes>
 
-      </>
+      </div>
     )
   }
   
