@@ -7,7 +7,7 @@ multer = require("multer")
 
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer();
 
 router.get("/posts",controller.displayPost);
 router.post("/register", controller.handleRegister);
@@ -18,6 +18,5 @@ router.delete("/:id", controller.handleDeletePost);
 router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
 router.post("/logout", controller.handleLogout);
-router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
 
 module.exports = router;

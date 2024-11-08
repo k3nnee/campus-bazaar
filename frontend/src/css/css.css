@@ -8,17 +8,9 @@ h1{
 }
 
 .card-custom:hover{
-    border: 1.5px solid rgb(100, 100, 100);
+    border: 1px solid rgb(100, 100, 100);
     cursor: pointer;
-    transition: .1s;
-}
-
-.bi:hover{
-    box-shadow: 2px 2px 5px gray;
-}
-
-#dropdownMenuButton:hover{
-    text-shadow: 2px 2px 5px rgb(87, 86, 86);
+    transition: .5s;
 }
 
 .nav-link{

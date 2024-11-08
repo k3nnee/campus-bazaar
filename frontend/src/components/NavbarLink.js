@@ -41,7 +41,6 @@ const NavbarLink = (prop) => {
                                         {prop.user}
                                     </button>
                                     <ul className="dropdown-menu">
-                                        <li><Link className = "dropdown-item" to ="/user_profile">Profile</Link></li>
                                         <li className = "dropdown-item"><Logout email={prop.user}></Logout></li>
                                     </ul>
                                 </div>

@@ -2,13 +2,17 @@ import { useState } from "react"
 import "../css/css.css"
 
 const Profile = (prop) => {
+    const [email, setEmail] = useState('');  
     const [profileImage, setProfileImage] = useState(null);
-    const [imageError, setImageError] = useState('');
-    //const [isPending, setIsPending] = useState(false);
+    const [imagePreview, setImagePreview] = useState('');
+    const [isPending, setIsPending] = useState(false);
+    const [image, setImage] = useState(null);
+    const [imageError, setImageError] = useState('')
+    const [shakeFields, setShakeFields] = useState([]);  
 
     const validateImage = () => {
-        if (!profileImage) {
-            setImageError("*Please upload a profile picture");
+        if (!image) {
+            setImageError("*Please upload an image");
             return;
         } else {
             setImageError('');  
@@ -18,11 +22,13 @@ const Profile = (prop) => {
     const handleSubmitProfile = (e) => {
         e.preventDefault();
 
-        validateImage();
+        if (imageError || !image) {
+            return
+        }
 
-        const formData = new FormData();
+        const formData = new formData();
         formData.append('email', prop.user);
-        formData.append('profilePic', profileImage);
+        formData.append('image', image);
 
         fetch('http://localhost:8080/profile', {
 
@@ -30,7 +36,7 @@ const Profile = (prop) => {
             body: formData,
             
         }).then(async (res) => {
-            // setIsPending(false);
+            setIsPending(false);
             await handleResponse(await res.json());
         })
 
@@ -46,19 +52,9 @@ const Profile = (prop) => {
             )
         }
     }
-    
 
     return (
         <>
-            <form className="w-75 mt-3" onSubmit={handleSubmitProfile}>
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setProfileImage(e.target.files[0])}
-                />
-                {imageError && <p className="text-danger">{imageError}</p>}
-                <button type="submit">Upload Profile Picture</button>
-            </form>
         </>
     )
 };
