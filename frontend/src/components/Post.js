@@ -113,6 +113,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
                     </ul>
                 </div>
             </div>
+
             <hr className="m-0"></hr>
             <img className="w-100 h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
             <hr className="m-0"></hr>

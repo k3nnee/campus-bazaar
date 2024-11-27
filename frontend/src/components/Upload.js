@@ -1,5 +1,26 @@
 import { useState } from "react"
 import "../css/css.css"
+import {socket} from "../socket";
+
+const handleResponse = (data) => {
+    console.log(data.message)
+    if("message" in data){
+        alert(data.message)
+        window.location.href = "http://localhost:8080/"
+    }else{
+        return (
+            alert(data.error)
+        )
+    }
+}
+
+const upload_post = (data) => {
+    socket.emit("create_post", data);
+}
+
+socket.on("upload_response", (data) => {
+    handleResponse(data)
+})
 
 const Upload = (prop) => {
     const [title, setTitle] = useState('');
@@ -11,7 +32,7 @@ const Upload = (prop) => {
     const [priceError, setPriceError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
     const [imageError, setImageError] = useState('')
-    const [shakeFields, setShakeFields] = useState([]); 
+    const [shakeFields, setShakeFields] = useState([]);
 
     //ERROR MESSAGES WHEN INPUT IS NOT CORRECT
     const validateTitle = (value) => {
@@ -74,37 +95,36 @@ const Upload = (prop) => {
 
         // }
 
-        const formData = new FormData();
-        formData.append('image', image);
-        formData.append('title', title);
-        formData.append('price', price)
-        formData.append('description', description);
-        formData.append('email', prop.user);
+        const data = {};
 
-        fetch('http://localhost:8080/upload', {
-            method: 'POST',
-            body: formData,
-        }).then(async (res) => {
-                console.log("Listing added")
-                setIsPending(false);
-                setTitle('');
-                setPrice('');
-                setDescription('');
-                await handleResponse(await res.json())
-            }
-        )
+        data.image = image;
+        data.title = title;
+        data.price = price;
+        data.description = description;
+        data.email = prop.user;
+
+        // const formData = new FormData();
+        // formData.append('image', image);
+        // formData.append('title', title);
+        // formData.append('price', price)
+        // formData.append('description', description);
+        // formData.append('email', prop.user);
+
+        // fetch('http://localhost:8080/upload', {
+        //     method: 'POST',
+        //     body: formData,
+        // }).then(async (res) => {
+        //         console.log("Listing added")
+        //         setIsPending(false);
+        //         setTitle('');
+        //         setPrice('');
+        //         setDescription('');
+        //         await handleResponse(await res.json())
+        //     }
+        // )
+        upload_post(data);
     }
 
-    const handleResponse = async (data) => {
-        if("message" in data){
-            alert(data.message)
-            window.location.href = "http://localhost:8080/"
-        }else{
-            return (
-                alert(data.error)
-            )
-        }
-    }
 
     return (
         <>
