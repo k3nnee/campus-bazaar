@@ -6,7 +6,7 @@ const handleResponse = (data) => {
     console.log(data.message)
     if("message" in data){
         alert(data.message)
-        window.location.href = "http://localhost:8080/"
+        window.location.href = "/"
     }else{
         return (
             alert(data.error)

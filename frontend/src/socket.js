@@ -1,4 +1,6 @@
 import {io} from "socket.io-client";
 
-export const socket = io("http://localhost:8080")
+export const socket = io("https://campus-bazaar-koyz.onrender.com/", {
+    secure: true
+});
 

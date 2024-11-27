@@ -11,7 +11,7 @@ const Body = () => {
 
     const renderPost = async () => {
         try {
-            const response = await fetch("http://localhost:8080/posts");
+            const response = await fetch("/posts");
             const posts = await response.json();
             setData(posts);
         } catch (err) {
@@ -25,7 +25,7 @@ const Body = () => {
         const fetchPosts = async () => {
             try {
                 setLoading(true)
-                const response = await fetch("http://localhost:8080/posts");
+                const response = await fetch("/posts");
                 if (!response.ok) {
                     throw new Error("Failed to fetch posts");
                 }

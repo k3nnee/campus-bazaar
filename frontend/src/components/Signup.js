@@ -12,7 +12,7 @@ const Signup = () => {
         event.preventDefault();
 
         try{
-            const res = await fetch("http://localhost:8080/register", {
+            const res = await fetch("/register", {
                 method : "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -32,7 +32,7 @@ const Signup = () => {
 
     const handleResponse = (data) => {
         if("message" in data){
-            window.location.href = "http://localhost:8080/"
+            window.location.href = "/"
             alert("Registered successfully! Please sign in with the credentials! :)")
         }else{
             return (
