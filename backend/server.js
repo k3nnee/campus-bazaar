@@ -10,9 +10,19 @@ const { Server } = require('socket.io');
 app = express();
 
 const server = http.createServer(app);
-const wss = new Server(server);
+const wss = new Server(server, {
+    cors: {
+        origin: 'https://campus-bazaar-koyz.onrender.com',
+        methods: ['GET', 'POST'],
+        credentials: true,
+    }
+});
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://campus-bazaar-koyz.onrender.com',
+    methods: ['GET', 'POST'],
+    credentials: true,
+}));
 
 app.use(cookieParser())
 app.use(express.json());
