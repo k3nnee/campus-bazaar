@@ -1,6 +1,6 @@
 import {io} from "socket.io-client";
 
-export const socket = io("https://campus-bazaar-koyz.onrender.com/", {
+export const socket = io("/", {
     secure: true
 });
 
