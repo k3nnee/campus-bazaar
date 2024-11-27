@@ -4,6 +4,8 @@
   "description": "",
   "main": "backend/server.js",
   "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && node server.js",
     "dev": "nodemon server.js"
   },
   "dependencies": {
@@ -21,6 +23,7 @@
     "react": "^18.3.1",
     "react-router-dom": "^6.27.0",
     "sanitize-html": "^2.13.1",
+    "socket.io": "^4.8.1",
     "uppy": "^4.5.0"
   }
 }

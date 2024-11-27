@@ -88,6 +88,7 @@ const handleUpload = async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     const { title, price, description, email } = req.body;
     const image = req.file;
+    console.log(image);
     //CHECK FOR EMPTY FIELDS
     if (!title || title.trim().length === 0) { return res.status(400).json({ error: "Please include a title" }); }
     if (!price) { return res.status(400).json({ error: "Please include a price" }) }
