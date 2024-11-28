@@ -24,7 +24,7 @@ const Profile = (prop) => {
         formData.append('email', prop.user);
         formData.append('profilePic', profileImage);
 
-        fetch('http://localhost:8080/profile', {
+        fetch('/profile', {
 
             method: 'POST',
             body: formData,
@@ -39,7 +39,7 @@ const Profile = (prop) => {
     const handleResponse = async (data) => {
         if("message" in data){
             alert(data.message)
-            window.location.href = "http://localhost:8080/"
+            window.location.href = "/"
         }else{
             return (
                 alert(data.error)

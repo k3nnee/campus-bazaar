@@ -23,7 +23,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
     useEffect(() => {
         const fetchBookmarkData = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/${id}/bookmark-count`, {
+                const response = await fetch(`/${id}/bookmark-count`, {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -46,7 +46,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
     }, [id]);
     const handleSave = async () => {
         setSaved((prevState) => !prevState)
-        const response = await fetch(`http://localhost:8080/${id}/bookmark`, {
+        const response = await fetch(`/${id}/bookmark`, {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -70,7 +70,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
 
     const handleDelete = async () => {
         console.log("Received ID in Post:", id);
-        const response = await fetch(`http://localhost:8080/${id}`, {
+        const response = await fetch(`/${id}`, {
             method: 'DELETE',
             credentials: 'include',
             headers: {
@@ -113,6 +113,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
                     </ul>
                 </div>
             </div>
+
             <hr className="m-0"></hr>
             <img className="w-100 h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
             <hr className="m-0"></hr>

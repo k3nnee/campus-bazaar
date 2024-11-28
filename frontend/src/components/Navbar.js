@@ -5,7 +5,7 @@ import {useEffect} from "react";
 export default function Navbar({user, setUser, toggleDarkMode, isDark}) {
     useEffect(() => {
         const getUser = async () => {
-            const res = await fetch("http://localhost:8080/getUser", {
+            const res = await fetch("/getUser", {
                 method : "GET",
                 credentials: "include",
                 headers: {

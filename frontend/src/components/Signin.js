@@ -9,7 +9,7 @@ const Signin = (prop) => {
         event.preventDefault();
 
         try{
-            const res = await fetch("http://localhost:8080/login", {
+            const res = await fetch("/login", {
                 method : "POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ const Signin = (prop) => {
 
     const handleResponse = (data) => {
         if("message" in data){
-            window.location.href = "http://localhost:8080/"
+            window.location.href = "/"
             alert("Logged in successfully")
         }else{
             return (
