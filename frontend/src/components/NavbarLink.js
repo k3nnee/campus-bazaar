@@ -3,7 +3,7 @@ import Logout from "./Logout";
 
 const NavbarLink = (prop) => {
     return (
-        <div className={prop.styles} id="navbarToggleExternalContent" >
+        <div className={`${prop.styles} ${prop.isDark ? "dark-mode" : "light-mode"}`} id="navbarToggleExternalContent" >
             <ul className="navbar-nav">
                 <li className="nav-item d-flex justify-content-center mt-2 mb-1">
                     <Link className="nav-link m-0 mx-1" to="/user_upload">
@@ -35,13 +35,18 @@ const NavbarLink = (prop) => {
                                     <i className="fa-sharp fa-solid fa-bell"></i>
                                 </Link>
                             </li>
+                            <li className="nav-item d-flex justify-content-center mt-2 mb-1 me-1">
+                                <button onClick={prop.toggleDarkMode} className={`btn btn-toggle-theme ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+                                    {prop.isDark ? (<i className="fa-solid fa-sun" style={{ color: "#ffdf00" }}></i>) : (<i className="fa-solid fa-moon" style={{ color: "#05dbfc" }}></i>)}
+                                </button>
+                            </li>
                             <li className="nav-item d-flex justify-content-center mt-2 mb-1">
                                 <div className={`dropdown ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                                     <button className="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         {prop.user}
                                     </button>
                                     <ul className={`dropdown-menu ${prop.isDark ? "dark-mode" : "light-mode"}`}>
-                                        <li><Link className = "dropdown-item" to ="/user_profile">Profile</Link></li>
+                                        <li><Link className = "dropdown-item ms-2" to ="/user_profile">Account</Link></li>
                                         <li className = "dropdown-item"><Logout email={prop.user}></Logout></li>
                                     </ul>
                                 </div>

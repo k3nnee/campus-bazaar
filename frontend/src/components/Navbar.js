@@ -26,18 +26,18 @@ export default function Navbar({user, setUser, toggleDarkMode, isDark}) {
                     <Link className="navbar-brand ms-2 ps-2 me-0 pe-0" style = {{color:"white"}} to="/">CAMPUS BAZAAR</Link>
                     <div>
                         <button className="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
+                            <span className="icon-container">
+                            <i className="fa-solid fa-bars collapsed-icon" style={{color: "white"}}></i> 
+                            </span>
                         </button>
                     </div>
                 </div>
 
-                <NavbarLink user = {user} styles = "container-fluid d-flex justify-content-end d-none d-lg-flex " isDark={isDark}/>
-                <button onClick={toggleDarkMode} className={`btn btn-toggle-theme ${isDark ? "dark-mode" : "light-mode"}`}>
-                {isDark ? (<i className="fa-solid fa-sun" style={{ color: "#ffdf00" }}></i>) : (<i className="fa-solid fa-moon" style={{ color: "#05dbfc" }}></i>)}
-            </button>
+                <NavbarLink user = {user} styles = "container-fluid d-flex justify-content-end d-none d-lg-flex " isDark={isDark} toggleDarkMode={toggleDarkMode}/>
+                
             </nav>
 
-            <NavbarLink user = {user} styles = "collapse navbar-collapse pb-2 px-5" isDark={isDark}/>
+            <NavbarLink user = {user} styles = "collapse navbar-collapse pb-2 px-5" isDark={isDark} toggleDarkMode={toggleDarkMode}/>
             
         </>
     )

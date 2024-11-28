@@ -8,6 +8,7 @@ body.dark-mode{
     color: rgb(240, 240, 240);
 }
 
+
 h1{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
@@ -73,11 +74,11 @@ h1{
 
 }
 
-.navbar-custom.light-mode, .navbar-nav.light-mode, .card-header.light-mode {
+.navbar-custom.light-mode, .navbar-nav.light-mode, .card-header.light-mode, .navbar-collapse.show.light-mode{
     background-color: #063761;
 }
 
-.navbar-custom.dark-mode, .navbar-nav.dark-mode, .card-header.dark-mode {
+.navbar-custom.dark-mode, .navbar-nav.dark-mode, .card-header.dark-mode, .navbar-collapse.show.dark-mode {
     background-color: #03203a;
 }
 
