@@ -1,6 +1,7 @@
 import { useState } from "react"
 import "../css/css.css"
 
+
 const Upload = (prop) => {
     const [title, setTitle] = useState('');
     const [price, setPrice] = useState('');
@@ -107,9 +108,9 @@ const Upload = (prop) => {
     }
 
     return (
-        <>
-            <div className="card mt-5 mx-3 mx-lg-5">
-                <div className="card-header pt-3" style={{ backgroundColor: "#063761", color: "white" }}>
+        <div className={`body-content ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+            <div className={`card mt-5 mx-3 mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+                <div className={`card-header pt-3 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                     <h3>
                         Uploading a post
                     </h3>
@@ -120,7 +121,7 @@ const Upload = (prop) => {
                             <label htmlFor="itemName" className="form-label">Enter item name</label>
                             <input
                                 type="text"
-                                className={`form-control ${shakeFields.includes('title') ? 'input-invalid' : ''}`}
+                                className={`form-control ${shakeFields.includes('title') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`}
                                 id="itemName"
                                 placeholder="Enter here"
                                 value={title}
@@ -134,7 +135,7 @@ const Upload = (prop) => {
                                 type="number"
                                 min="0"
                                 step={0.1}
-                                className={`form-control ${shakeFields.includes('price') ? 'input-invalid' : ''}`}
+                                className={`form-control ${shakeFields.includes('price') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`}
                                 id="price"
                                 placeholder="Enter price"
                                 value={price}
@@ -144,7 +145,7 @@ const Upload = (prop) => {
                         <div className="mb-3">
                             <label htmlFor="description" className="form-label">Enter a description</label>
                             <textarea
-                                className={`form-control ${shakeFields.includes('description') ? 'input-invalid' : ''}`}
+                                className={`form-control ${shakeFields.includes('description') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`}
                                 id="description" rows="4"
                                 placeholder="Enter here"
                                 value={description}
@@ -155,7 +156,7 @@ const Upload = (prop) => {
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
                             <br></br>
                             <input
-                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''}`} 
+                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`} 
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
@@ -168,7 +169,7 @@ const Upload = (prop) => {
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
                             <br></br>
                             <input
-                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''}`} 
+                                className={`form-control ${shakeFields.includes('image') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`} 
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
@@ -179,7 +180,7 @@ const Upload = (prop) => {
                         <div className="container-fluid d-flex justify-content-end p-0 mt-2">
                             {
                                 !isPending ?
-                                    <button className="btn btn-outline-secondary"> Upload post </button>
+                                    <button className={`btn ${prop.isDark ? "btn-outline-light" : "btn-outline-secondary"}`}> Upload post </button>
                                     :
                                     <button className="btn btn-outline-secondary" disabled> Uploading ... </button>
                             }
@@ -188,7 +189,7 @@ const Upload = (prop) => {
                 </div>
             </div>
 
-        </>
+        </div>
     )
 }
 

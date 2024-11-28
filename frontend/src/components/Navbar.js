@@ -2,7 +2,7 @@ import { Link } from "react-router-dom"
 import NavbarLink from "./NavbarLink";
 import {useEffect} from "react";
 
-export default function Navbar({user, setUser}) {
+export default function Navbar({user, setUser, toggleDarkMode, isDark}) {
     useEffect(() => {
         const getUser = async () => {
             const res = await fetch("http://localhost:8080/getUser", {
@@ -21,21 +21,24 @@ export default function Navbar({user, setUser}) {
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-light navbar-custom">
+            <nav className={`navbar navbar-expand-lg navbar-light navbar-custom ${isDark ? "dark-mode" : "light-mode"}`}>
                 <div className = "d-flex justify-content-between container-fluid">
                     <Link className="navbar-brand ms-2 ps-2 me-0 pe-0" style = {{color:"white"}} to="/">CAMPUS BAZAAR</Link>
-
                     <div>
-                        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <button className="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
                     </div>
                 </div>
 
-                <NavbarLink user = {user} styles = "container-fluid d-flex justify-content-end d-none d-lg-flex"/>
+                <NavbarLink user = {user} styles = "container-fluid d-flex justify-content-end d-none d-lg-flex " isDark={isDark}/>
+                <button onClick={toggleDarkMode} className={`btn btn-toggle-theme ${isDark ? "dark-mode" : "light-mode"}`}>
+                {isDark ? (<i className="fa-solid fa-sun" style={{ color: "#ffdf00" }}></i>) : (<i className="fa-solid fa-moon" style={{ color: "#05dbfc" }}></i>)}
+            </button>
             </nav>
 
-            <NavbarLink user = {user} styles = "collapse navbar-collapse pb-2 px-5"/>
+            <NavbarLink user = {user} styles = "collapse navbar-collapse pb-2 px-5" isDark={isDark}/>
+            
         </>
     )
   }

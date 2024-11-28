@@ -7,7 +7,7 @@ const styles = {
 }
 
 
-const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
+const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, isDark}) => {
     const [saved, setSaved] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
     const [bookmarkCount, setBookmarkCount] = useState(0);
@@ -91,14 +91,14 @@ const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
     if (isDeleted) {
         return null;
     }
-
+    // console.log("profilepic: ", profilePic_url);
     return (
-        <div className="card-custom card mb-0" style={styles} onClick={() => handleClick(index)}>
+        <div className={`card-custom card mb-0 ${isDark ? "dark-mode" : "light-mode"}`} style={styles} onClick={() => handleClick(index)}>
             <div className="container-fluid ps-3 my-2 d-flex justify-content-between">
                 <p className="m-1 text-start">
-                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src="/images/default_profile.jpg" className="rounded-circle me-2 border " />
+                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src={profilePic_url || "/images/default_profile.jpg"} alt={email} className="rounded-circle me-2 border " />
                     {email}</p>
-                <div className="dropdown-delete d-flex justify-content-center">
+                <div className="d-flex justify-content-center">
                     <button
                         className="btn btn-link p-0 text-black text-decoration-none"
                         type="button"
@@ -106,7 +106,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
                         data-bs-toggle="dropdown"
                         aria-expanded="true"
                     >
-                        <strong>· · ·</strong>
+                        <strong className={`dropdown-delete ${isDark ? "dark-mode" : "light-mode"}`}>· · ·</strong>
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end" style={{ backgroundColor: "rgb(249, 55, 60)" }}>
                         <li ><a className="dropdown-delete d-flex justify-content-center m-0 text-white text-decoration-none" onClick={handleDelete} >Delete</a></li>
@@ -119,13 +119,13 @@ const Post = ({ id, title, imageUrl, email, handleClick, index}) => {
             <div className="d-flex justify-content-between p-2 align-items-center mt-2 mx-2">
                 <h6 className="card-title m-0 ps-1"> <strong> {title} </strong> </h6>
                 <div>
-                    <button className="btn bi bi-cart pe-1" onClick={handlePurchase}></button>
-                    <button className={isBookmarked ? "btn bi bi-bookmark-check-fill" : "btn bi bi-bookmark"}
+                <button className={`btn bi bi-cart ${isDark ? "dark-mode" : "light-mode"}`} onClick={handlePurchase}></button>
+                    <button className={`${isBookmarked ? "btn bi bi-bookmark-check-fill" : "btn bi bi-bookmark"} ${isDark ? "dark-mode" : "light-mode"}`}
                         onClick={handleSave}></button>
                     <span className="ms-1">{bookmarkCount}</span>
 
                 </div>
-            </div>`
+            </div>
             {/*<hr className="m-0"></hr>*/}
             {/*<div className="card-body">*/}
             {/*    <h6 className="card-subtitle text-body-secondary">${price}</h6>*/}
