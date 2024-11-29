@@ -1,5 +1,6 @@
 dns = require("dns");
 
+
 function passwordValidator(password){
     const minLen = 8;
     const containUpperCase = /[A-Z]/.test(password);
@@ -51,5 +52,8 @@ function emailValidator(email, callback){
     });
     
 } 
+
+
+
 
 module.exports = {passwordValidator, emailValidator};

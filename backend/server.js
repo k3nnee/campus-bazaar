@@ -6,6 +6,7 @@ cookieParser = require("cookie-parser")
 
 const http = require("http");
 const { Server } = require('socket.io');
+const rateLimiter = require("express-rate-limit");
 
 app = express();
 
@@ -24,9 +25,18 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(cookieParser())
+const dos_protection = rateLimiter({
+    windowMs: 10 * 1000,
+    max: 50,
+    handler: (req, res) => {
+        res.status(429).json({message: "Too many request, potential attack risk detected"});
+    }
+})
+
+app.use(cookieParser());
 app.use(express.json());
-app.use("/", router)
+app.use(dos_protection);
+app.use("/", router);
 
 app.use((req, res, next) => {
     if (req.url.endsWith('.ico')) {
