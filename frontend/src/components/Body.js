@@ -3,7 +3,7 @@ import DesktopUI from "./DesktopUI";
 import {useEffect, useState} from "react";
 import {socket} from "../socket"
 
-const Body = () => {
+const Body = ({isDark}) => {
     const windowDimension = window.innerWidth;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const Body = () => {
         };
 
         fetchPosts().then(() => console.log("Posts fetched"));
-    }, []);
+    }, [isDark]);
 
     const Spinner = () => {
         return (
@@ -52,12 +52,12 @@ const Body = () => {
     }
 
     return (
-        <div>
+        <div className={`body-content ${isDark ? "dark-mode" : "light-mode"}`}>
             {
                 loading && <Spinner />
             }
             {
-                windowDimension <= 1000 ? <InfiniteFlatList setHighlight = {setHighlighted} data = {data}/> : <DesktopUI highlight = {highlighted} setHighlight = {setHighlighted} data = {data}/>
+                windowDimension <= 1000 ? <InfiniteFlatList setHighlight = {setHighlighted} data = {data} isDark={isDark}/> : <DesktopUI highlight = {highlighted} setHighlight = {setHighlighted} data = {data} isDark={isDark}/>
             }
         </div>
     )

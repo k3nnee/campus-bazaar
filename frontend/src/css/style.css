@@ -2,24 +2,42 @@ body
 {
     margin: 0;
     padding: 0;
+    height: 100vh;
+    width: 100vw;
     font-family: sans-serif;
+    display: flex;
+    overflow: hidden;
 }
 .sign-up-form
 {
     max-width: 400px;
     max-height: 425px;
     box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
-    background: #fff;
     padding: 40px;
     margin: 8% auto;
     text-align: center;
 }
+
+.sign-up-form.light-mode, .log-in-form.light-mode
+{
+    color: black;
+    border: 1.5px solid rgb(210,210,210);
+    background-color: rgb(255, 255, 255);
+}
+
+.sign-up-form.dark-mode, .log-in-form.dark-mode
+{
+    color: rgb(240, 240, 240);
+    border: 1.5px solid #354357;
+    background-color: #1c2d42;
+}
+
+
 .log-in-form
 {
     max-width: 400px;
     max-height: 400px;
     box-shadow: 0 0 3px 0 rgba(0,0,0,0.3);
-    background: #fff;
     padding: 40px;
     margin: 8% auto;
     text-align: center;
@@ -33,15 +51,37 @@ body
     border: 1px solid #999;
     outline: none;
 }
-.sign-up-form h1
+
+.input-box.light-mode{
+    color: black; 
+    background-color: rgb(255, 255, 255);
+}
+
+.input-box.dark-mode{
+    background-color: #1c2d42;
+    color: rgb(255, 255, 255);
+}
+
+.input-box.dark-mode::placeholder{
+    color: #cad4e0;
+    opacity: 1;
+}
+
+.sign-up-form.light-mode h1, .log-in-form.light-mode h1
 {
     color: #063761;
     margin-bottom: 30px;
 }
-.log-in-form h1
+
+.sign-up-form.dark-mode h1, .log-in-form.dark-mode h1
 {
-    color: #063761;
+    color: rgb(255, 255, 255);
     margin-bottom: 30px;
+}
+
+.sign-up-form.dark-mode a, .log-in-form.dark-mode a
+{
+    color: #00c3ff;
 }
 
 .auth-button
@@ -56,11 +96,18 @@ body
     outline: none;
     cursor: pointer;
 }
-.signup-btn
+.signup-btn.light-mode
 {
+    color: rgb(255, 255, 255);
     background-color: #063761;
 }
-.login-btn
+.signup-btn.dark-mode
+{
+    color: rgb(255, 255, 255);
+    background-color: #2b4a71;
+}
+
+/* .login-btn
 {
     background-color: #063761;
-}
+} */

@@ -6,7 +6,7 @@ const Home = (prop) => {
     return (
         <>
             {
-                prop.user ? <Body /> : <Unauthorized message = "Please sign in to view contents"/>
+                prop.user ? <Body isDark={prop.isDark}/> : <Unauthorized message = "Please sign in to view contents" isDark={prop.isDark}/>
             }
         </>
     );

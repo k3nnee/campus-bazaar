@@ -4,7 +4,7 @@ import Upload from "./Upload";
 const UploadPage = (prop) => {
     return (
         <>
-            {prop.user ? <Upload user = {prop.user}/> : <Unauthorized message = "Please sign in to upload posts" />}
+            {prop.user ? <Upload user = {prop.user} isDark = {prop.isDark}/> : <Unauthorized message = "Please sign in to upload posts" isDark={prop.isDark}/>}
         </>
     )
 }
