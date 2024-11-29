@@ -59,16 +59,16 @@ wss.on("connect", (socket) => {
             method: 'POST',
             body: formData
         })
-            .catch((error) => {
-                socket.emit("upload_response", { error })
-
-            })
-            .finally(() => {
+            .then(() => {
                 socket.broadcast.emit("broadcast", { message: "Image uploaded successfully" })
                 socket.emit("upload_response", { message: "Image uploaded successfully" })
-        })
+                console.log("posted!")
+            })
+            .catch((error) => {
+                socket.emit("upload_response", { error })
+                console.log(error);
 
-        console.log("posted!")
+            })
     })
 })
 
