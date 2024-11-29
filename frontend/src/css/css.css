@@ -62,7 +62,7 @@ h1{
 .nav-link{
     text-decoration: none;
     color: white;
-    margin-right: 20ptx;
+    margin-right: 20px;
 }
 
 .navbar {
@@ -324,14 +324,16 @@ nav a {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.body-content.dark-mode,  .expand.light-mode{
+.body-content.dark-mode,  .expand.dark-mode{
     background-color: #00182e;
     scrollbar-color: rgb(255, 255, 255) #00182e;
+    border: 1px solid rgb(31, 49, 70);
     
 }
 
 .body-content.light-mode,  .expand.light-mode{
     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(210,210,210);
 }
 
 .body-content{

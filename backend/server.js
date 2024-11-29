@@ -55,7 +55,7 @@ wss.on("connect", (socket) => {
         formData.append('description', data.description);
         formData.append('email', data.email);
 
-        await fetch('/upload', {
+        await fetch(process.env.HOST+'/upload', {
             method: 'POST',
             body: formData
         })
