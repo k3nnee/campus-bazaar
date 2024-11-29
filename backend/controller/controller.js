@@ -21,6 +21,7 @@ const handleRegister = async (req, res) => {
     const { email, password, passwordDupe } = req.body;
 
     const isValidEmail = await emailValidator(email);
+
     if (!isValidEmail) {
         res.status(400).json({ error: "Not a valid email" });
         return
@@ -133,11 +134,18 @@ const displayPost = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     try {
+        const {email} = req.body;
         const posts = await postCollection.find().sort({ "createdAt": -1 }).toArray();
-        const formattedPosts = posts.map(post => ({
-            ...post,
-            id: post._id,
-            imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null
+        const user = await userCollection.findOne({"email": email});
+        // console.log("user *****: ", user);
+        const formattedPosts = await Promise.all(posts.map(async post => {
+            const user = await userCollection.findOne({ "email": post.email });
+            return {
+                ...post,
+                id: post._id,
+                imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null,
+                profilePic_url: user && user.profilePic ? `data:image/jpeg;base64,${user.profilePic.toString('base64')}` : null
+            };
         }));
         res.status(200).json(formattedPosts);
     } catch (error) {
@@ -279,10 +287,33 @@ const handleLogout = async (req, res) => {
             {email},
             { $unset: {token: ""}} //Clear token from database
         );
-        console.log(x)
+        // console.log(x)
     }
     res.status(200).json({ message: "User has logged out"})
 };
+
+const handleProfileUpload = async (req, res) => {
+    console.log("Profile upload endpoint hit");
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const {email} = req.body;
+    const profilePic = req.file;
+
+    if(!profilePic){
+        return res.status(400).json({ error: "No image found" });
+    }
+
+    // console.log(email)
+    if (email) {
+        const result = await userCollection.findOneAndUpdate(
+            { email },
+            { $set: { "profilePic": profilePic ? profilePic.buffer : null} }
+        );
+        // console.log("email------",email)
+    }
+    
+    res.status(200).json({ message: "Profile picture updated successfully"});
+}
 
 module.exports = {
     handleLogin,
@@ -293,6 +324,6 @@ module.exports = {
     handleDeletePost,
     handleBookmark,
     handleGetBookmarkCount,
-    handleLogout
+    handleLogout,
+    handleProfileUpload
 }
-

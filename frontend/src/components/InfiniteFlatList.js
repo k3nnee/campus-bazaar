@@ -1,6 +1,6 @@
 import Post from "./Post";
 
-const InfiniteFlatList = ({data, setHighlight}) => {
+const InfiniteFlatList = ({data, setHighlight, isDark}) => {
 
     // const NoContent = () => {
     //     return (
@@ -27,6 +27,8 @@ const InfiniteFlatList = ({data, setHighlight}) => {
                                     handleClick = {setHighlight}
                                     index = {index}
                                     bookmarkedBy = {item.bookmarkedBy}
+                                    profilePic_url={item.profilePic_url}
+                                    isDark={isDark}
                                 />
                             </div>
                         ))

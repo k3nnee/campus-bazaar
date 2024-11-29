@@ -1,16 +1,62 @@
-body {
+body.light-mode {
     color: rgb(0, 0, 0);
     background-color: rgb(255, 255, 255);
 }
+
+body.dark-mode{
+    background-color: #415a7f;
+    color: rgb(240, 240, 240);
+}
+
 
 h1{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .card-custom:hover{
-    border: 1px solid rgb(100, 100, 100);
+    border: 1.5px solid rgb(100, 100, 100);
     cursor: pointer;
-    transition: .5s;
+    transition: .1s;
+}
+
+.card-custom.dark-mode, .expanded-post.dark-mode, .card.dark-mode{
+    color: rgb(240, 240, 240);
+    border: 1.5px solid #354357;
+    background-color: #1c2d42;
+}
+
+.card-custom.light-mode, .expanded-post.light-mode, .card.light-mode{
+    color: black;
+    border: 1.5px solid rgb(210,210,210);
+    background-color: rgb(255, 255, 255);
+}
+
+.bi.dark-mode{
+    color:rgb(240, 240, 240);
+}
+
+.bi.light-mode{
+    color: rgb(0, 0, 0);
+}
+
+.bi{
+    border-radius: 10px;
+}
+
+.bi:hover{
+    box-shadow: 2px 2px 5px gray;
+}
+
+#dropdownMenuButton:hover{
+    text-shadow: 2px 2px 5px rgb(87, 86, 86);
+}
+
+.dropdown-delete.dark-mode, .expanded-text.dark-mode{
+    color: rgb(240, 240, 240);
+}
+
+.dropdown-delete.light-mode, .expanded-text.light-mode{
+    color: black;
 }
 
 .nav-link{
@@ -23,12 +69,21 @@ h1{
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    width: 100vw;
     padding: 1rem;
 
 }
 
-.navbar-custom {
+.navbar-custom.light-mode, .navbar-nav.light-mode, .card-header.light-mode, .navbar-collapse.show.light-mode{
     background-color: #063761;
+}
+
+.navbar-custom.dark-mode, .navbar-nav.dark-mode, .card-header.dark-mode, .navbar-collapse.show.dark-mode {
+    background-color: #03203a;
+}
+
+.card-header{
+    color: rgb(255, 255, 255);
 }
 
 .form-inline{
@@ -44,6 +99,27 @@ h1{
 .form-inline .form-control:focus {
     border-color: #00b7ff;
     background-color: #e6f7ff;
+}
+
+.form-control.light-mode{
+    color: black; 
+    background-color: rgb(255, 255, 255);
+}
+
+.form-control.light-mode::placeholder{
+    color: #7488a1;
+    opacity: 1;
+}
+
+
+.form-control.dark-mode{
+    background-color: #1c2d42;
+    color: rgb(255, 255, 255);
+}
+
+.form-control.form-control.dark-mode::placeholder{
+    color: #cad4e0;
+    opacity: 1;
 }
 
 .nav-item{
@@ -83,9 +159,9 @@ h1{
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.75);
 }
 
-nav {
+nav{
     height: 80px;
-    background: rgb(36, 150, 226);
+    background-color: #063761;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -126,7 +202,7 @@ nav a {
 
 .slider-wrapper {
     font-size: 40px;
-    color:#aaa;
+    color:#effb0a;
     font-weight: bold;
     text-transform: uppercase;
     display: flex;
@@ -175,7 +251,7 @@ nav a {
 .search-container {
     display: flex; /* Center the search bar */
     justify-content: center; /* Align to the center */
-    width: 100%; /* Full width to keep it centered */
+    width: 100vw; /* Full width to keep it centered */
     margin: 0 auto
 }
 
@@ -235,3 +311,35 @@ nav a {
     60%{transform: translate(-5px);}
     75%{transform: translate(3px);}
 }
+
+.btn-toggle-theme {
+    padding: 0.5rem;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.body-content.dark-mode,  .expand.dark-mode{
+    background-color: #00182e;
+    scrollbar-color: rgb(255, 255, 255) #00182e;
+    border: 1px solid rgb(31, 49, 70);
+    
+}
+
+.body-content.light-mode,  .expand.light-mode{
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(210,210,210);
+}
+
+.body-content{
+    height: calc(100vh - 80px);
+    width: 100vw;
+    overflow-y: auto;
+}
+
+

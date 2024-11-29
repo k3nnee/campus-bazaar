@@ -39,17 +39,17 @@ const Signin = (prop) => {
     }
 
     return (
-        <>
-            <div className="log-in-form">
+        <div className={`body-content ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+            <div className={`log-in-form ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                 <h1> {prop.message ? prop.message : "Sign in"} </h1>
                 <form>
-                    <input type="email" className="input-box" placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
-                    <input type="password" className="input-box" placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
-                    <button type="button" className="signup-btn auth-button" onClick = {onSubmit}>Sign In</button>
+                    <input type="email" className={`input-box ${prop.isDark ? "dark-mode" : "light-mode"}`} placeholder="Your Email" value = {email} onChange = {e => setEmail(e.target.value)}/>
+                    <input type="password" className={`input-box ${prop.isDark ? "dark-mode" : "light-mode"}`} placeholder="Your Password" value = {password} onChange = {e => setPassword(e.target.value)}/>
+                    <button type="button" className={`signup-btn auth-button ${prop.isDark ? "dark-mode" : "light-mode"}`} onClick = {onSubmit}>Sign In</button>
                     <p>Don't Have an Account? <a href="/register">Sign Up</a> </p>
                 </form>
             </div>
-        </>
+        </div>
     )
 }
 
