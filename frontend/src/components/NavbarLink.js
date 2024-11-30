@@ -23,6 +23,11 @@ const NavbarLink = (prop) => {
                                 Login
                             </Link>
                         </li>
+                        <li className="nav-item d-flex justify-content-center mt-2 mb-1 me-1">
+                            <button onClick={prop.toggleDarkMode} className={`btn btn-toggle-theme ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+                                {prop.isDark ? (<i className="fa-solid fa-sun" style={{ color: "#ffdf00" }}></i>) : (<i className="fa-solid fa-moon" style={{ color: "#05dbfc" }}></i>)}
+                            </button>
+                        </li>
                     </> :
                         <>
                             <li className="nav-item d-flex justify-content-center mt-2 mb-1">
