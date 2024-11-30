@@ -11,7 +11,7 @@ const DesktopUI = ({data, highlight, setHighlight, isDark}) => {
                 <div className = "col-8">
                     <div className = {`container-fluid h-100 d-flex justify-content-start mt-4 `}>
                         <div className = {`expand rounded-2 position-sticky z-1 w-100 ${isDark? "dark-mode" : "light-mode"}`}
-                             style = {{width: "25rem", height: window.innerHeight*.825, top: "53px", border: "1px solid"}}>
+                             style = {{width: "25rem", height: window.innerHeight*.825, top: "30px"}}>
                             {
                                 highlight != null && <div className = {`expanded-post container-fluid h-100 ${isDark? "dark-mode" : "light-mode"}`}>
                                     <Expanded

@@ -16,4 +16,5 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/
       #JWT_SECRET_KEY is arbitrary
       - JWT_SECRET_KEY=ihavealongpassword
+      - HOST=http://localhost:8080
     command: nodemon server.js
