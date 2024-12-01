@@ -6,6 +6,9 @@ const Profile = (prop) => {
     const [profileImage, setProfileImage] = useState(null);
     const [imageError, setImageError] = useState('');
     const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
+    const [userPosts, setUserPosts] = useState([]);
+    const [currentProfilePic, setCurrentProfilePic] = useState(null);
+
     //const [isPending, setIsPending] = useState(false);
 
     const validateImage = () => {
@@ -69,36 +72,80 @@ const Profile = (prop) => {
             }
         };
 
+        const fetchUserPosts = async () => {
+            try {
+                const response = await fetch('/user-posts', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setUserPosts(data);
+                } else {
+                    console.error("Failed to fetch user posts");
+                }
+            } catch (error) {
+                console.error("Error fetching user posts:", error);
+            }
+        };
+
+        const fetchProfilePic = async () => {
+            try {
+                const response = await fetch('/profile-pic', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+    
+                if (response.ok) {
+                    const data = await response.json();
+                    setCurrentProfilePic(data.profilePicUrl);
+                } else {
+                    console.error("Failed to fetch profile picture");
+                }
+            } catch (error) {
+                console.error("Error fetching profile picture:", error);
+            }
+        };
+
         fetchBookmarkedPosts();
+        fetchUserPosts();
+        fetchProfilePic();
     }, []);
     
 
     return (
         <div className={`body-content  ${prop.isDark ? "dark-mode" : "light-mode"}`}>
             <div className={`card mt-5 mx-3 mb-5 mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
-                <form className="w-75 mt-3" onSubmit={handleSubmitProfile}>
-                    <div className="ps-5 mb-3">
-                        <label htmlFor="imageUpload" className="fs-3 pb-3 flexform-label">Upload a Profile Picture</label>
-                        <br></br>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => setProfileImage(e.target.files[0])}
-                            name = "image"
-                        />
-                        {imageError && <p className="text-danger">{imageError}</p>}
-                        <br></br>
-                        <div className="container-fluid d-flex justify-content-end ">
-                            <button className={`btn ${prop.isDark ? "btn-outline-light" : "btn-outline-secondary"}`}>Upload</button>
+                <div className="upload-profile mt-3 pt-3 ps-5 d-flex align-items-center">
+                    <img src={currentProfilePic} alt="Profile" className={`profile-pic rounded-circle me-2 border ${prop.isDark ? "dark-mode" : "light-mode"}`}/>
+                    <form className="mt-3" onSubmit={handleSubmitProfile}>
+                        <div className="ps-5 mb-3">
+                            <label htmlFor="imageUpload" className="fs-3 pb-3 flexform-label">Upload a Profile Picture</label>
+                            <br></br>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => setProfileImage(e.target.files[0])}
+                                name = "image"
+                            />
+                            {imageError && <p className="text-danger">{imageError}</p>}
+                            <br></br>
+                            <div className="container-fluid d-flex justify-content-end">
+                                <button className={`btn ${prop.isDark ? "btn-outline-light" : "btn-outline-secondary"}`}>Upload</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-
-                <h3 className="ps-5 ">Bookmarks</h3>
-                <div className={`container horizontal-scrollable d-flex mb-2 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+                    </form>
+                </div>
+                <div style={{height: '20px'}}></div>
+                <div>
+                <h3 className="ps-5">Bookmarks - {bookmarkedPosts.length}</h3>
+                <div className={`mx-3 mb-5 mx-lg-5 container horizontal-scrollable d-flex mb-2 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                     {bookmarkedPosts.length > 0 ? 
                         bookmarkedPosts.map((post) => (
-                            <div className="bookmarked-posts p-2" key={post.id}>
+                            <div className="bookmarked-posts" key={post.id}>
                                 <Post
                                     id={post.id}
                                     title={post.title}
@@ -113,7 +160,28 @@ const Profile = (prop) => {
                         ))
                     : <p>No bookmarked posts found.</p>}
                 </div>
-
+                </div>
+                <div>
+                <h3 className="ps-5 mt-3">Posts - {userPosts.length}</h3>
+                <div className={`mx-3 mb-5 mx-lg-5 container horizontal-scrollable d-flex ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+                    {userPosts.length > 0 ?
+                        userPosts.map((post) => (
+                            <div className="user-posts" key={post.id}>
+                                <Post
+                                    id={post.id}
+                                    title={post.title}
+                                    imageUrl={post.imageUrl}
+                                    email={post.email}
+                                    profilePic_url={post.profilePic_url}
+                                    isDark={prop.isDark}
+                                    handleClick={() => {}}
+                                />
+                            </div>
+                        ))
+                        : <p>No posts found.</p>}
+                </div>
+                </div>
+                
 
             </div>
         </div>

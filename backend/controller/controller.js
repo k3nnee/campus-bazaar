@@ -303,6 +303,36 @@ const handleGetBookmarkedPosts = async (req, res) => {
     }
 };
 
+const handleGetUserPosts = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    const curr_user = await userCollection.findOne({ token });
+
+    if (!curr_user) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    try {
+        const userPosts = await postCollection.find({ email: curr_user.email }).toArray();
+        const formattedPosts = userPosts.map((post) => ({
+            ...post,
+            id: post._id,
+            title: post.sanitized_title,
+            imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null,
+            profilePic_url: curr_user.profilePic
+                ? `data:image/jpeg;base64,${curr_user.profilePic.toString('base64')}`
+                : "/images/default_profile.jpg",
+        }));
+
+        res.status(200).json(formattedPosts);
+    } catch (error) {
+        console.error("Error fetching user posts:", error);
+        res.status(500).json({ error: "Failed to fetch user posts" });
+    }
+};
+
 
 const handleLogout = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
@@ -348,6 +378,25 @@ const handleProfileUpload = async (req, res) => {
     res.status(200).json({ message: "Profile picture updated successfully"});
 }
 
+const handleGetProfilePic= async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    const user = await userCollection.findOne({ token });
+
+    if (!user) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    const profilePicUrl = user.profilePic
+        ? `data:image/jpeg;base64,${user.profilePic.toString('base64')}`
+        : "/images/default_profile.jpg";
+
+    res.status(200).json({ profilePicUrl });
+};
+
+
 module.exports = {
     handleLogin,
     handleRegister,
@@ -358,6 +407,8 @@ module.exports = {
     handleBookmark,
     handleGetBookmarkedPosts,
     handleGetBookmarkCount,
+    handleGetUserPosts,
     handleLogout,
-    handleProfileUpload
+    handleProfileUpload,
+    handleGetProfilePic
 }
