@@ -17,6 +17,7 @@ router.get("/getUser", controller.handleLanding);
 router.delete("/:id", controller.handleDeletePost);
 router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
+router.get("/bookmarked-posts", controller.handleGetBookmarkedPosts);
 router.post("/logout", controller.handleLogout);
 router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
 

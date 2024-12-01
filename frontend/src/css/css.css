@@ -324,14 +324,14 @@ nav a {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.body-content.dark-mode,  .expand.light-mode{
+.body-content.dark-mode,  .expand.dark-mode{
     background-color: #00182e;
     scrollbar-color: rgb(255, 255, 255) #00182e;
     
 }
 
 .body-content.light-mode,  .expand.light-mode{
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(224, 221, 221);
 }
 
 .body-content{
@@ -339,5 +339,24 @@ nav a {
     width: 100vw;
     overflow-y: auto;
 }
+
+
+.horizontal-scrollable{
+    overflow-x: auto; 
+    overflow-y: hidden;
+    display: inline-flex;
+    gap: 10px;
+    width: 100vw;
+}
+
+.horizontal-scrollable.dark-mode{
+    scrollbar-color: rgb(255, 255, 255) #00182e;
+}
+
+.bookmarked-posts{
+    flex: 0 0 auto;
+}
+
+
 
 
