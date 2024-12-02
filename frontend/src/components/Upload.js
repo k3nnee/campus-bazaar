@@ -34,6 +34,9 @@ const Upload = (prop) => {
     const [descriptionError, setDescriptionError] = useState('')
     const [imageError, setImageError] = useState('')
     const [shakeFields, setShakeFields] = useState([]);
+    const [hour, setHour] = useState(0);
+    const [minute, setMinute] = useState(0);
+    const [second, setSecond] = useState(0);
 
     //ERROR MESSAGES WHEN INPUT IS NOT CORRECT
     const validateTitle = (value) => {
@@ -67,7 +70,7 @@ const Upload = (prop) => {
             setImageError(''); 
         }
     };
-    ////////////////////////////////////////////////////////////////////////////////////////
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -77,7 +80,7 @@ const Upload = (prop) => {
         validateTitle(title);
         validatePrice(price);
         validateDescription(description);
-       
+
         const newShakeFields = [];
         if (titleError) newShakeFields.push('title');
         if (priceError) newShakeFields.push('price');
@@ -92,10 +95,6 @@ const Upload = (prop) => {
             return;
         }
 
-        // if (titleError || priceError || descriptionError || imageError) {
-
-        // }
-
         const data = {};
 
         data.image = image;
@@ -103,39 +102,23 @@ const Upload = (prop) => {
         data.price = price;
         data.description = description;
         data.email = prop.user;
+        data.hour = hour;
+        data.minute = minute;
+        data.second = second;
 
-        // const formData = new FormData();
-        // formData.append('image', image);
-        // formData.append('title', title);
-        // formData.append('price', price)
-        // formData.append('description', description);
-        // formData.append('email', prop.user);
-
-        // fetch('http://localhost:8080/upload', {
-        //     method: 'POST',
-        //     body: formData,
-        // }).then(async (res) => {
-        //         console.log("Listing added")
-        //         setIsPending(false);
-        //         setTitle('');
-        //         setPrice('');
-        //         setDescription('');
-        //         await handleResponse(await res.json())
-        //     }
-        // )
         upload_post(data);
     }
 
 
     return (
         <div className={`body-content ${prop.isDark ? "dark-mode" : "light-mode"}`}>
-            <div className={`card mt-5 mx-3 mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+            <div className={`card mt-3 mx-3 h-auto mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                 <div className={`card-header pt-3 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                     <h3>
                         Uploading a post
                     </h3>
                 </div>
-                <div className="my-5 d-flex justify-content-center">
+                <div className="my-1 d-flex justify-content-center">
                     <form className="w-75 mt-3" onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="itemName" className="form-label">Enter item name</label>
@@ -171,6 +154,15 @@ const Upload = (prop) => {
                                 value={description}
                                 onChange={(e) => { setDescription(e.target.value); validateDescription(e.target.value); }}></textarea>
                             {descriptionError && <p className="text-danger">{descriptionError}</p>}
+                        </div>
+                        <label htmlFor="time" className="form-label">Schedule a post: </label>
+                        <div className="mb-3 d-flex">
+                            <p className = "m-0 me-1">Hour</p>
+                            <input type="number" id="hour" name="quantity" min="0" max="23" style={{width: "2.5rem"}} value={hour} className = "me-2" onChange={(e) => setHour(e.target.value)}></input>
+                            <p className = "m-0 me-1">Minute</p>
+                            <input type="number" id="minute" name="quantity" min="0" max="59" style={{width: "2.5rem"}} value={minute} className = "me-2" onChange={(e) => setMinute(e.target.value)}></input>
+                            <p className = "m-0 me-1">Second</p>
+                            <input type="number" id="second" name="quantity" min="0" max="59" style={{width: "2.5rem"}} value={second} className = "me-2" onChange={(e) => setSecond(e.target.value)}></input>
                         </div>
                         <div className="w-50 d-none d-lg-block">
                             <label htmlFor="imageUpload" className="form-label">Upload an image</label>
