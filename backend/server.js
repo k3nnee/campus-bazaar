@@ -9,6 +9,11 @@ const { Server } = require('socket.io');
 const { Agenda }= require('agenda');
 
 const agenda = new Agenda({ db: { address: process.env.MONGODB_URI } });
+const rateLimiter = require("express-rate-limit");
+
+const client = require("./utils/mongoclient");
+const database = client.db("campus-bazaar")
+const userCollection = database.collection("user");
 
 app = express();
 
@@ -27,9 +32,39 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(cookieParser())
+const blocked_IPs = {}
+
+const dos_protection = rateLimiter({
+    windowMs: 10 * 1000,
+    max: 50,
+    handler: (req, res) => {
+        blocked_IPs[req.ip] = Date.now();
+        res.status(429).json({message: "Too many request, potential attack risk detected"});
+    }
+})
+
+app.use((req, res, next) => {
+    const curr_IP = req.ip;
+    const curr_time = Date.now();
+
+    if(curr_IP in blocked_IPs){
+        const curr_IP_time = blocked_IPs[curr_IP];
+        const time_diff = Math.floor((curr_time - curr_IP_time) / 1000);
+
+        if (time_diff > 30){
+            delete blocked_IPs.curr_IP
+        }else{
+            return res.status(429).json({message: "Too many request, still blocked"});
+        }
+    }
+
+    next();
+});
+
+app.use(cookieParser());
 app.use(express.json());
-app.use("/", router)
+app.use(dos_protection);
+app.use("/", router);
 
 app.use((req, res, next) => {
     if (req.url.endsWith('.ico')) {
@@ -83,7 +118,18 @@ wss.on("connect", async (socket) => {
     await agenda.start();
 
     socket.on("create_post", async (data) => {
-        console.log(data.image);
+        const user = await userCollection.findOne({"email": data.email});
+        const currTime = new Date(Date.now());
+
+        if("lastPosted" in user){
+            console.log(currTime - user["lastPosted"])
+            if(currTime - user["lastPosted"] < 300000){
+                socket.emit("upload_response", { error: "Please wait 5 minutes before uploading another post" });
+                return;
+            }
+        }
+
+
         const binaryData = Buffer.from(data.image, "utf-8").toString("base64");
 
         const jobData = {

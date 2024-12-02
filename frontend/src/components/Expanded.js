@@ -2,8 +2,8 @@ const Expanded = ({ title, price, description, imageUrl, email, isDark}) => {
     return (
         <div className = "p-4 container-fluid h-100">
             <div className = "row h-100 align-items-center">
-                <div className = "col-6">
-                    <img className = "w-100 h-100" src={imageUrl || "/images/placeholder.jpeg"} alt={title}/>
+                <div className = "col-6 h-100">
+                    <img className = "w-100 h-100 object-fit-cover" src={imageUrl || "/images/placeholder.jpeg"} alt={title}/>
                 </div>
                 <div className = {`expanded-text col-6 ${isDark? "dark-mode" : "light-mode"}`}>
                     <h2> {title} </h2>

@@ -264,7 +264,7 @@ nav a {
     border-radius: 28px;
     background: #f6f6f6;
     transition: box-shadow 0.25s;
-    margin: 0px auto; /* Reduced margin for a closer position below the slider */
+    margin: 0px auto; 
 }
 
 .image-container{
@@ -342,4 +342,42 @@ nav a {
     overflow-y: auto;
 }
 
+.upload-profile{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    width: 100%;
 
+}
+
+.profile-pic{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.horizontal-scrollable{
+    overflow-x: auto; 
+    overflow-y: hidden;
+    display: inline-flex;
+    gap: 10px;
+    width: 100vw;
+    padding-bottom: 1rem;
+}
+
+.horizontal-scrollable.dark-mode{
+    scrollbar-color: rgb(255, 255, 255) #00182e;
+}
+
+.bookmarked-posts, .user-posts{
+    flex: 0 0 auto;
+}
+
+.card{
+    overflow: auto;
+}
+
+.profile.dark-mode, .profile-pic.dark-mode{
+    border: 2px solid #354357 !important;
+}
