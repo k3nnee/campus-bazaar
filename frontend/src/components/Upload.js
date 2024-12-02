@@ -129,7 +129,7 @@ const Upload = (prop) => {
 
     return (
         <div className={`body-content ${prop.isDark ? "dark-mode" : "light-mode"}`}>
-            <div className={`card mt-5 mx-3 mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+            <div className={`card mt-5 mx-3 mx-lg-5 mb-3 d-flex justify-content-center ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                 <div className={`card-header pt-3 ${prop.isDark ? "dark-mode" : "light-mode"}`}>
                     <h3>
                         Uploading a post
