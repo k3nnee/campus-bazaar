@@ -6,6 +6,7 @@ cookieParser = require("cookie-parser")
 
 const http = require("http");
 const { Server } = require('socket.io');
+const rateLimiter = require("express-rate-limit");
 
 app = express();
 
@@ -24,9 +25,39 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(cookieParser())
+const blocked_IPs = {}
+
+const dos_protection = rateLimiter({
+    windowMs: 10 * 1000,
+    max: 50,
+    handler: (req, res) => {
+        blocked_IPs[req.ip] = Date.now();
+        res.status(429).json({message: "Too many request, potential attack risk detected"});
+    }
+})
+
+app.use((req, res, next) => {
+    const curr_IP = req.ip;
+    const curr_time = Date.now();
+
+    if(curr_IP in blocked_IPs){
+        const curr_IP_time = blocked_IPs[curr_IP];
+        const time_diff = Math.floor((curr_time - curr_IP_time) / 1000);
+
+        if (time_diff > 30){
+            delete blocked_IPs.curr_IP
+        }else{
+            return res.status(429).json({message: "Too many request, still blocked"});
+        }
+    }
+
+    next();
+});
+
+app.use(cookieParser());
 app.use(express.json());
-app.use("/", router)
+app.use(dos_protection);
+app.use("/", router);
 
 app.use((req, res, next) => {
     if (req.url.endsWith('.ico')) {

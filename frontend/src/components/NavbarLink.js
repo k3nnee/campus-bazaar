@@ -51,7 +51,7 @@ const NavbarLink = (prop) => {
                                         {prop.user}
                                     </button>
                                     <ul className={`dropdown-menu ${prop.isDark ? "dark-mode" : "light-mode"}`}>
-                                        <li><Link className = "dropdown-item ms-2" to ="/user_profile">Account</Link></li>
+                                        <li><div className="ps-2"><Link className = "dropdown-item" to ="/user_profile">Account</Link></div></li>
                                         <li className = "dropdown-item"><Logout email={prop.user}></Logout></li>
                                     </ul>
                                 </div>
