@@ -96,7 +96,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         <div className={`card-custom card mb-0 ${isDark ? "dark-mode" : "light-mode"}`} style={styles} onClick={() => handleClick(index)}>
             <div className="container-fluid ps-3 my-2 d-flex justify-content-between">
                 <p className="m-1 text-start">
-                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src={profilePic_url || "/images/default_profile.jpg"} alt={email} className="rounded-circle me-2 border " />
+                    <img style={{ height: 43, width: 43, objectFit: 'cover' }} src={profilePic_url || "/images/default_profile.jpg"} alt={email} className={`profile rounded-circle me-2 border ${isDark ? "dark-mode" : "light-mode"}`} />
                     {email}</p>
                 <div className="d-flex justify-content-center">
                     <button
@@ -115,7 +115,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             </div>
 
             <hr className="m-0"></hr>
-            <img className="w-100 h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
+            <img className="w-100 object-fit-cover" src={imageUrl || "/images/placeholder.jpeg"} alt={title} style = {{height: "70%"}}/>
             <hr className="m-0"></hr>
             <div className="d-flex justify-content-between p-2 align-items-center mt-2 mx-2">
                 <h6 className="card-title m-0 ps-1"> <strong> {title} </strong> </h6>
