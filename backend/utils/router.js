@@ -18,6 +18,7 @@ router.delete("/:id", controller.handleDeletePost);
 router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
 router.post("/logout", controller.handleLogout);
-router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
-
+router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload);
+router.post("/add_to_cart",controller.handleAddToCart);
+router.get("/showCart",controller.displayCart);
 module.exports = router;
