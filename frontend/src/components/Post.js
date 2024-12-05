@@ -87,11 +87,8 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             console.log("Item added to cart successfully");
             const data = await response.json();
 
-            setIsInCart((prev) => {
-                const updatedCartState = prev ? removeFromCart(id) : addToCart(id);
-                localStorage.setItem("cart", JSON.stringify(updatedCartState));
-                return !prev;
-            });
+            setIsInCart((prev) => !prev);
+            
 
         } else {
             console.error("Failed to add item to cart");

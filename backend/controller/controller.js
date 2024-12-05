@@ -268,6 +268,8 @@ const displayCart = async (req, res) => {
         res.json([]);
     }
 };
+ 
+ 
 
 const handleAddToCart = async (req,res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
@@ -284,7 +286,7 @@ const handleAddToCart = async (req,res) => {
     const user = await userCollection.findOne({ email: curr_email });
     const isInCart = user.cart.includes(id);
         if (isInCart){
-        console.log("...Removing From Cart...")
+        console.log("...Removing Fromhasdsddasd Cart...")
         await userCollection.findOneAndUpdate(
             { email: curr_email },
             { $pull: { cart:  id  } }
