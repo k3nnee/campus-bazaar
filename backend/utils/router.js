@@ -17,8 +17,11 @@ router.get("/getUser", controller.handleLanding);
 router.delete("/:id", controller.handleDeletePost);
 router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
+router.get("/bookmarked-posts", controller.handleGetBookmarkedPosts);
 router.post("/logout", controller.handleLogout);
-router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload);
 router.post("/add_to_cart",controller.handleAddToCart);
-router.get("/showCart",controller.displayCart);
+router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
+router.get("/profile-pic", controller.handleGetProfilePic);
+router.get("/user-posts", controller.handleGetUserPosts);
+
 module.exports = router;
