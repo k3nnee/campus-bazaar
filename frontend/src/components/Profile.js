@@ -129,7 +129,7 @@ const Profile = (prop) => {
                         data-bs-target="#profileSettings"
                         aria-expanded="false"
                         aria-controls="profileSettings"
-                        style={{position: 'relative', transform: 'translate(100%, -320%)'}}
+                        style={{position: 'relative', transform: 'translate(100%, -320%)', background: 'none'}}
                     > 
                         <i className={`bi bi-gear-fill fa-2x ${prop.isDark ? "dark-mode" : "light-mode"}`}></i>
                     </button>

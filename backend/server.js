@@ -9,6 +9,7 @@ const { Server } = require('socket.io');
 const rateLimiter = require("express-rate-limit");
 
 app = express();
+app.set('trust proxy', true);
 
 const server = http.createServer(app);
 const wss = new Server(server, {
@@ -45,7 +46,7 @@ app.use((req, res, next) => {
         const time_diff = Math.floor((curr_time - curr_IP_time) / 1000);
 
         if (time_diff > 30){
-            delete blocked_IPs.curr_IP
+            delete blocked_IPs[curr_IP]
         }else{
             return res.status(429).json({message: "Too many request, still blocked"});
         }
@@ -54,9 +55,9 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use(dos_protection);
 app.use(cookieParser());
 app.use(express.json());
-app.use(dos_protection);
 app.use("/", router);
 
 app.use((req, res, next) => {
