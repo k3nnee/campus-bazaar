@@ -28,7 +28,7 @@ const handleRegister = async (req, res) => {
         res.status(400).json({ error: "Not a valid email" });
         return
     } else if (!passwordValidator(password)) {
-        res.status(400).json({ error: "Passwords must contain special characters, capital letter, lowercase letter, and min 8 characters" });
+        res.status(400).json({ error: "Passwords must contain special characters, capital letter, lowercase letter, max 30 characters, and min 8 characters" });
         return
     }
 
