@@ -335,7 +335,7 @@ nav a {
 .body-content.light-mode,  .expand.light-mode, .posts.light-mode, .bookmarks.light-mode{
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(210,210,210);
-    color: black;
+    color: #03203a;
 }
 
 .body-content{
@@ -403,7 +403,8 @@ nav a {
     border: 2px solid #354357 !important;
 }
 
-.gear-btn, .gear-btn:focus, .gear-btn:hover, .bi-gear-fill:hover, .bi-gear-fill:focus {
+.gear-btn, .gear-btn:focus, .gear-btn:hover, .gear-btn-clicked,
+.bi-gear-fill:hover, .bi-gear-fill:focus{
     border: 0;
     text-shadow: 0;
     box-shadow: none;
