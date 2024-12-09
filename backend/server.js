@@ -53,7 +53,7 @@ app.use((req, res, next) => {
         const time_diff = Math.floor((curr_time - curr_IP_time) / 1000);
 
         if (time_diff > 30){
-            delete blocked_IPs.curr_IP
+            delete blocked_IPs[curr_IP]
         }else{
             return res.status(429).json({message: "Too many request, still blocked"});
         }
