@@ -12,6 +12,7 @@ const agenda = new Agenda({ db: { address: process.env.MONGODB_URI } });
 const rateLimiter = require("express-rate-limit");
 
 const client = require("./utils/mongoclient");
+const { options } = require("sanitize-html");
 const database = client.db("campus-bazaar")
 const userCollection = database.collection("user");
 
@@ -38,8 +39,10 @@ const blocked_IPs = {}
 const dos_protection = rateLimiter({
     windowMs: 10 * 1000,
     max: 50,
+    onLimitReached: (req, res, options) => { 
+        blocked_IPs[req.ip] = Date.now() + (30 * 1000);
+    },
     handler: (req, res) => {
-        blocked_IPs[req.ip] = Date.now();
         res.status(429).json({message: "Too many request, potential attack risk detected"});
     }
 })
@@ -54,12 +57,13 @@ app.use((req, res, next) => {
 
         if (time_diff > 30){
             delete blocked_IPs[curr_IP]
+            next();
         }else{
             return res.status(429).json({message: "Too many request, still blocked"});
         }
     }
 
-    next();
+    
 });
 
 app.use(dos_protection);
