@@ -21,6 +21,7 @@ const DesktopUI = ({data, highlight, setHighlight, isDark}) => {
                                         description={data[highlight].sanitized_description}
                                         imageUrl={data[highlight].imageUrl}
                                         isDark={isDark}
+                                        id={data[highlight].id}
                                     />
                                 </div>
                                     :

@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar"
 import Signin from "./components/Signin";
 import UploadPage from "./components/UploadPage";
 import ProfilePage from "./components/Profile";
-
+import Cart from "./components/Cart";
 import {useState, useEffect} from "react";
 import {socket} from "./socket";
 
@@ -52,6 +52,7 @@ function App() {
             <Route path="/user_upload" element={<UploadPage  user = {user} isDark={isDark} />} />
             <Route path="/login" element={<Signin isDark={isDark}/>} />
             <Route path="/user_profile" element={<ProfilePage user = {user} isDark={isDark}/>} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
 
       </div>
