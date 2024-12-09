@@ -1,25 +1,11 @@
 import InfiniteFlatList from "./InfiniteFlatList";
 import DesktopUI from "./DesktopUI";
 import {useEffect, useState} from "react";
-import {socket} from "../socket"
-
 const Body = ({isDark}) => {
     const windowDimension = window.innerWidth;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [highlighted, setHighlighted] = useState(null);
-
-    const renderPost = async () => {
-        try {
-            const response = await fetch("/posts");
-            const posts = await response.json();
-            setData(posts);
-        } catch (err) {
-            console.log(err.message);
-        }
-    };
-
-    socket.on("broadcast", renderPost);
 
     useEffect( () => {
         const fetchPosts = async () => {
@@ -52,7 +38,7 @@ const Body = ({isDark}) => {
     }
 
     return (
-        <div className={`body-content ${isDark ? "dark-mode" : "light-mode"}`}>
+        <div className={`position-relative body-content ${isDark ? "dark-mode" : "light-mode"}`}>
             {
                 loading && <Spinner />
             }

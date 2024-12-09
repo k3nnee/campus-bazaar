@@ -15,11 +15,15 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         const savedStatus = localStorage.getItem(`isBookmarked-${id}`);
         return savedStatus ? JSON.parse(savedStatus) : false;
     });
+    const [isInCart, setIsInCart] = useState(false);
  
     useEffect(() => {
         localStorage.setItem(`isBookmarked-${id}`, JSON.stringify(isBookmarked));
     }, [isBookmarked, id]);
-
+    useEffect(() => {
+        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
+        setIsInCart(cartState.includes(id));
+    }, [id]);
     useEffect(() => {
         const fetchBookmarkData = async () => {
             try {
@@ -64,8 +68,31 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             console.error("Failed to bookmark post");
         }
     };
-    const handlePurchase = () => {
-        console.log("Print used for placeholder")
+    const handlePurchase = async () => {
+        console.log("Add to cart Request")
+        setSaved((prevState) => !prevState)
+        const response = await fetch(`/add_to_cart`,
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id})
+            }
+
+        );
+
+        if (response.ok) {
+            console.log("Item added to cart successfully");
+            const data = await response.json();
+
+            setIsInCart((prev) => !prev);
+            
+
+        } else {
+            console.error("Failed to add item to cart");
+        }
     }
 
     const handleDelete = async () => {
@@ -91,7 +118,18 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
     if (isDeleted) {
         return null;
     }
-    // console.log("profilepic: ", profilePic_url);
+    const addToCart = (id) => {
+        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
+        cartState.push(id);
+        return cartState;
+    };
+
+
+    const removeFromCart = (id) => {
+        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
+        const updatedCartState = cartState.filter((item) => item !== id);
+        return updatedCartState;
+    };
     return (
         <div className={`card-custom card mb-0 ${isDark ? "dark-mode" : "light-mode"}`} style={styles} onClick={() => handleClick(index)}>
             <div className="container-fluid ps-3 my-2 d-flex justify-content-between">
@@ -115,7 +153,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             </div>
 
             <hr className="m-0"></hr>
-            <img className="w-100 h-75" src={imageUrl || "/images/placeholder.jpeg"} alt={title} />
+            <img className="w-100 object-fit-cover" src={imageUrl || "/images/placeholder.jpeg"} alt={title} style = {{height: "70%"}}/>
             <hr className="m-0"></hr>
             <div className="d-flex justify-content-between p-2 align-items-center mt-2 mx-2">
                 <h6 className="card-title m-0 ps-1"> <strong> {title} </strong> </h6>

@@ -19,6 +19,7 @@ router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
 router.get("/bookmarked-posts", controller.handleGetBookmarkedPosts);
 router.post("/logout", controller.handleLogout);
+router.post("/add_to_cart",controller.handleAddToCart);
 router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
 router.get("/profile-pic", controller.handleGetProfilePic);
 router.get("/user-posts", controller.handleGetUserPosts);

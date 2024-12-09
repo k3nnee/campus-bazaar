@@ -118,6 +118,13 @@ const Profile = (prop) => {
 
     return (
         <div className={`body-content  ${prop.isDark ? "dark-mode" : "light-mode"}`}>
+{/*<<<<<<< HEAD*/}
+{/*            <div className={`card mt-5 mx-3 mb-5 mx-lg-5 ${prop.isDark ? "dark-mode" : "light-mode"}`}>*/}
+{/*                <div className="upload-profile mt-3 pt-3 d-flex align-items-center">*/}
+{/*                    <img src={currentProfilePic} alt="Profile" className={`profile-pic rounded-circle me-2 border ${prop.isDark ? "dark-mode" : "light-mode"}`}/>*/}
+{/*                    <form className="mt-3" onSubmit={handleSubmitProfile}>*/}
+{/*                        <div className="ps-5 mb-3">*/}
+{/*=======*/}
             <div className="upload-profile mt-3 pt-5 d-flex align-items-center" >
                 <img src={currentProfilePic} alt="Profile" className={`profile-pic rounded-circle me-2 border ${prop.isDark ? "dark-mode" : "light-mode"}`} style={{position: 'relative'}}/>
                 <h4><strong>{prop.user}</strong></h4>

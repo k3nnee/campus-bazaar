@@ -8,7 +8,9 @@ const userCollection = database.collection("user");
 const postCollection = database.collection("post");
 const crypto = require("crypto");
 const sanitizeHtml = require('sanitize-html');
-const { ObjectId } = require("mongodb")
+const { ObjectId } = require("mongodb");
+const { time } = require("console");
+const { title } = require("process");
 
 require("dotenv").config()
 
@@ -41,7 +43,7 @@ const handleRegister = async (req, res) => {
     const data = await userCollection.findOne({ email });
 
     if (data == null) {
-        await userCollection.insertOne({ email, "password": hashedPassword});
+        await userCollection.insertOne({ email, "password": hashedPassword,cart: []});
         res.status(200).json({ message: "User has been registered" });
     } else {
         res.status(401).json({ error: "Email is in use" });
@@ -71,7 +73,12 @@ const handleLogin = async (req, res) => {
 
     await userCollection.findOneAndUpdate(
         { email },
-        { $set: { "token": hashedToken } }
+        { 
+            $set: { 
+                token: hashedToken,
+                cart: [] 
+            }
+         }
     );
 
     res.cookie('authToken', token, {
@@ -87,7 +94,8 @@ const handleLogin = async (req, res) => {
 const handleUpload = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    const { title, price, description, email } = req.body;
+    const { title, price, description, email} = req.body;
+
     const image = req.file;
     console.log(image);
     //CHECK FOR EMPTY FIELDS
@@ -126,6 +134,7 @@ const handleUpload = async (req, res) => {
         createdAt: new Date()
     })
     console.log("UPLOAD IS OK")
+    await userCollection.findOneAndUpdate({email}, { $set: { lastPosted: new Date(Date.now()) } })
     res.status(200).json({ message: "Image uploaded successfully" });
 }
 
@@ -213,7 +222,88 @@ const handleDeletePost = async (req, res) => {
     }
 
 }
+const check_in_cart = async (req,res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    const curr_user = await userCollection.findOne({ token });
+    const { id } = req.body;
+    const post = await postCollection.findOne({ _id: new ObjectId(c.id) });
+    if (post){
+        console.log("Item is already in cart, button should display REMOVE");
+    }else{
+        console.log("ITEM IS NOT IN CART , button should display add to cart");
+    }
+}
+const displayCart = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    const curr_user = await userCollection.findOne({ token });
+    console.log("ATTEMPTING TO DISPLAY CART ");
+    
+    if (curr_user.cart && curr_user.cart.length > 0) {
+        
+        const cart_list = [];
+     
+        for (let cartId of curr_user.cart) {
+            const post = await postCollection.findOne({ _id: new ObjectId(cartId) });
+            if (post) {
+                sellerEmail = post.email;
+                sellerProfileImg = (userCollection.findOne({email: sellerEmail})).profilePic;
+                const item = {
+                    id: post._id,
+                    title: post.sanitized_title,
+                    price: post.parsed_price,
+                    image: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null,
+                    sellerPic: sellerProfileImg ? `data:image/jpeg;base64,${sellerProfileImg.toString('base64')}` : null,
+                };
+
+                cart_list.push(item);
+            } else {
+                console.error(`Post with ID ${cartItem.id} not found.`);
+            }
+        }
+
+        res.json(cart_list);
+    } else {
+        res.json([]);
+    }
+};
  
+ 
+
+const handleAddToCart = async (req,res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    const { id } = req.body;
+
+
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
+    
+    const curr_user = await userCollection.findOne({token});
+    const post = await postCollection.findOne({ _id: new ObjectId(id) });
+    const curr_email  = curr_user.email;
+    console.log("ATTEMPTING TO ADD TO CART");
+    const user = await userCollection.findOne({ email: curr_email });
+    const isInCart = user.cart.includes(id);
+        if (isInCart){
+        console.log("...Removing Fromhasdsddasd Cart...")
+        await userCollection.findOneAndUpdate(
+            { email: curr_email },
+            { $pull: { cart:  id  } }
+        );
+        res.status(200).json({ message: 'Item removed from cart' });
+    }else{
+    console.log("BEEP BOOP ADDING TO CART")
+    await userCollection.findOneAndUpdate(
+        { email: curr_email },
+        { $addToSet: { cart: id } }
+        
+    );
+    res.status(200).json({ message: 'Item added to cart' });
+}
+}
 const handleBookmark = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -398,6 +488,9 @@ const handleGetProfilePic= async (req, res) => {
 
 
 module.exports = {
+    
+    displayCart,
+    handleAddToCart,
     handleLogin,
     handleRegister,
     handleUpload,
