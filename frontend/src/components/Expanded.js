@@ -1,4 +1,29 @@
-const Expanded = ({ title, price, description, imageUrl, email, isDark}) => {
+const Expanded = ({id, title, price, description, imageUrl, email, isDark}) => {
+    const handlePurchase = async () => {
+        console.log("Add to cart Request")
+        
+        const response = await fetch(`/add_to_cart`,
+            {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({id})
+            }
+
+        );
+
+        if (response.ok) {
+            console.log("Item added to cart successfully");
+            const data = await response.json();
+
+            
+            
+        } else {
+            console.error("Failed to add item to cart");
+        }
+    }
     return (
         <div className = "p-4 container-fluid h-100">
             <div className = "row h-100 align-items-center">
@@ -13,7 +38,7 @@ const Expanded = ({ title, price, description, imageUrl, email, isDark}) => {
                         <p> {description} </p>
                     </div>
                     <hr className = "mt-0"></hr>
-                    <button className={`btn ${isDark ? "btn-outline-light" : "btn-outline-secondary"} mb-1 w-100`}> Add to cart </button>
+                    <button className={`btn ${isDark ? "btn-outline-light" : "btn-outline-secondary"} mb-1 w-100`}onClick={handlePurchase}> Add to cart </button>
                     <br></br>
                 </div>
             </div>

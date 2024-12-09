@@ -48,17 +48,22 @@ const Upload = (prop) => {
     };
     const validatePrice = (value) => {
         const parsedPrice = parseFloat(value);
-        if (parsedPrice <= 0) {
+        const isTwoDecimals = /^\d+(\.\d{1,2})?$/.test(value);  
+        if (!isTwoDecimals || parsedPrice <= 0) {
             setPriceError("*Price must be a positive value with up to two decimal places");
         } else {
+            
             setPriceError(''); 
         }
     };
-
+    
+    
+    
     const validateDescription = (value) => {
         if (value.length > 500 || value.length < 20) {
             setDescriptionError("*Description must be between 20-500 characters");
         } else {
+            
             setDescriptionError(''); 
         }
     };
@@ -137,7 +142,7 @@ const Upload = (prop) => {
                             <input
                                 type="number"
                                 min="0"
-                                step={0.1}
+                                step={0.01}
                                 className={`form-control ${shakeFields.includes('price') ? 'input-invalid' : ''} ${prop.isDark ? "dark-mode" : "light-mode"}`}
                                 id="price"
                                 placeholder="Enter price"

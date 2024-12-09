@@ -16,6 +16,7 @@ const database = client.db("campus-bazaar")
 const userCollection = database.collection("user");
 
 app = express();
+app.set("trust proxy", true);
 
 const server = http.createServer(app);
 const wss = new Server(server, {
