@@ -8,13 +8,14 @@ To fulfill the requirements of this objective, we decided to create a user accou
 Testing procedures:
 1. Register a new account
 2. Log into the account
-3. Under your username in press "Account"
-   1. Give it a second or two to load
+3. Under your username, press "Account"
 4. Ensure that there are no posts listed
 5. Upload a post under the sell option in the navigation bar
 6. Do not make a scheduled post, leave it as 0, 0, 0
 7. Once you have posted, go back into your account dashboard and verify it is there under posts
-8. Go to the homepage by clicking "Campus Bazaar"
-9. Bookmark 2 different posts
-10. Go back to your account page and verify that both posts are under bookmarks
     1. Give it a second or two to load
+9. Go to the homepage by clicking "Campus Bazaar" on the top left corner
+10. Bookmark 2 different posts by clicking on the bookmark icon
+11. Go back to your account page and verify that both posts are under bookmarks
+    1. Give it a second or two to load
+    
