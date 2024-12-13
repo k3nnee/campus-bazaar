@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import "../css/css.css";
+
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe('pk_test_51QVNSTRwkgvEbIsRqJX6GbN973sOHhGvOQ4TYRUTfAgQPiTxGdhWEyJYGWxPlU4dhJtOtBrHEcb9H19dSfne0uW100eiyvJOW7'); 
+
 const Cart = () => {
     const [saved, setSaved] = useState(false);
-
     const [items, setItems] = useState([]);
+    
     const fetchCart = async () => {
         try {
             const response = await fetch('/showCart', {
@@ -22,43 +28,74 @@ const Cart = () => {
             console.error("Error fetching cart:", error);
         }
     };
-    const handleRemove = async (id) => {
-        console.log("Remove from cart request:", id);
 
+    const handleCartUpdate = async (id) => {
         try {
-            const response = await fetch(`/add_to_cart`, {
+            const response = await fetch('/updateCart', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id }),
+                body: JSON.stringify({ id, action: 'remove' })
             });
 
-
             if (response.ok) {
-                const data = await response.json();
-                console.log("Item removed from cart successfully:", data);
-                fetchCart(); //RELOAD THE PAGE WHEN DELELTEING
+                fetchCart(); 
+                window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { id, action: 'remove' } }));
+                console.log('cartUpdated event dispatched for item:', id);
             } else {
-                console.error("Failed to remove item:", response.status, await response.text());
+                console.error("Failed to update the cart");
             }
         } catch (error) {
-            console.error("Error in handleRemove:", error);
+            console.error("Error updating the cart:", error);
         }
     };
-
 
     useEffect(() => {
         fetchCart();
     }, []);
+
     const cartTotal = items.reduce((total, item) => total + item.price, 0);
+
+    const handleCheckout = async () => {
+        const response = await fetch('/payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({items: items.map(item => ({
+                id: item.id,
+                name: item.title,
+                price: item.price
+            }))
+        }),});
+        const data = await response.json();
+        if (data.url) {
+            window.location.href = data.url; 
+        } else {
+            alert(data.message);
+            console.error('Failed to start the checkout process.');
+        }
+    };
+
+    // for clearing cart  after checkout
+    useEffect(() => {
+        window.addEventListener('load', () => {
+            if (new URLSearchParams(window.location.search).has('session_id')) {
+                setItems([]); 
+            }
+        });
+    }, []);
+
+   console.log('items: ', items);
+
     return (
-        <div className="cart-page-container">
+        <div className={`body-conten d-flex justify-content-center`}>
+        {/* <div className="cart-page-container"> */}
             {items.length === 0 ? (
-                // <p>Your cart is empty.</p>
-                <div className="jesse">
-                    <img src="https://cdn.discordapp.com/attachments/1012940768937267293/1306147590416498719/Screenshot_20241113_014407_Gallery.jpg?ex=6751f47c&is=6750a2fc&hm=04a570ebd637e68df1c2aa125adb3cce0aadd6dfb77441e78431f50912fe5ee2&"></img>
+                <div className="no-item h-50 m-3 p-3 d-flex justify-content-center">
+                    <h3>No Items In Cart  (｡ •́︿•̀｡ ) </h3>
                 </div>) : (
                 <div class="container mt-5 p-3 rounded cart">
                     <div class="row no-gutters">
@@ -66,32 +103,42 @@ const Cart = () => {
                         <div class="col-md-8 product-details mr-2" style={{
                             maxHeight: '500px',
                             overflowY: 'auto',
+                            border: '1.5px solid rgb(210,210,210)',
+                            borderRadius: '10px',
+                            backgroundColor: '#f9f9f9'
+
+                        
                         }}>
                             {items.map((item) => (
-                                <div class="d-flex align-items-center mt-3 p-2 items rounded" key={item.id} style={{
-                                    position: 'relative',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '5px',
-                                    padding: '10px',
+                                <div class="d-flex align-items-center p-3 items rounded" key={item.id} style={{
+                                    position: 'relative'
+                                    // border: '1px solid #ccc',
+                                    // borderRadius: '5px',
+                                    // padding: '10px',
 
-                                    backgroundColor: '#f9f9f9',
+                                    // backgroundColor: '#f9f9f9',
                                 }}>
 
-                                    <button class="btn btn-transparent border-0" onClick={() => handleRemove(item.id)}
- >
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                    <img className="rounded" src={item.image} width="40" alt={item.title} />
-                                    <span class="font-weight-bold" style={{ marginLeft: "20px", fontFamily: "Helvetica, sans-serif", flexGrow: 1 }}>{item.title}</span>
-                                    <span className="font-weight-bold" style={{ fontFamily: "Helvetica, sans-serif", fontSize: '15px', marginLeft: 'auto' }}>${item.price}</span>
+                                    <img className="rounded p-3" src={item.image} style={{ cornerRadius: '10px', height: 135, width: 135, objectFit: 'cover' }} alt={item.title} />
+                                    <div className="d-flex justify-content-start flex-column p-0 ms-3 mt-3">
+                                        <h5 className="pb-3" style={{fontFamily: "Helvetica, sans-serif", flexGrow: 1, fontWeight: 'bold'}}>{item.title}</h5>
+                                        <p style={{fontFamily: "Helvetica, sans-serif", flexGrow: 1 , fontWeight: 'lighter', fontSize:  '0.875em'}}>Sold by: {item.email}</p>
+                                    </div>
+                                    <h7 className="font-weight-bold p-1" style={{ fontFamily: "Helvetica, sans-serif", fontSize: '15px', marginLeft: 'auto' }}>$ {item.price.toFixed(2)}</h7>
+                                    
+                                    <span>
+                                        <button className="btn btn-transparent ps-5 border-0" onClick={() => handleCartUpdate(item.id)} >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                    </span>
 
                                 </div>
                             ))}
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 ps-3">
                             <div class="payment-info p-3 rounded bg-info">
-                                <h6>Order Summary</h6>
+                                <h4 className="p-2">Order Summary</h4>
                                 <hr />
                                 <div class="d-flex justify-content-between">
                                     <span>Subtotal</span>
@@ -106,7 +153,7 @@ const Cart = () => {
                                     <span>Total</span>
                                     <span>${cartTotal.toFixed(2)}</span>
                                 </div>
-                                <button class="btn btn-primary btn-block mt-3">Checkout</button>
+                                <button class="btn btn-primary btn-block mt-3" onClick={handleCheckout}>Checkout</button>
                             </div>
                         </div>
                     </div>
@@ -115,6 +162,7 @@ const Cart = () => {
 
             )}
         </div>
+        // </div>
     );
 };
 

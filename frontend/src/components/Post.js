@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const styles = {
     "maxWidth": "25rem",
@@ -15,15 +15,28 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         const savedStatus = localStorage.getItem(`isBookmarked-${id}`);
         return savedStatus ? JSON.parse(savedStatus) : false;
     });
-    const [isInCart, setIsInCart] = useState(false);
+    const [isInCart, setIsInCart] = useState(() => {
+        try {
+            const savedStatus = localStorage.getItem(`cart-${id}`);
+            return savedStatus ? JSON.parse(savedStatus) : false;
+        } catch (error) {
+            console.error(`Error parsing JSON for cart-${id}:`, error);
+            return false; 
+        }
+    });
  
     useEffect(() => {
         localStorage.setItem(`isBookmarked-${id}`, JSON.stringify(isBookmarked));
     }, [isBookmarked, id]);
+
     useEffect(() => {
-        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
-        setIsInCart(cartState.includes(id));
-    }, [id]);
+        try {
+            localStorage.setItem(`cart-${id}`, JSON.stringify(isInCart));
+        } catch (error) {
+            console.error(`Error setting JSON for cart-${id}:`, error);
+        }
+    }, [isInCart, id]);
+
     useEffect(() => {
         const fetchBookmarkData = async () => {
             try {
@@ -48,6 +61,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
 
         fetchBookmarkData();
     }, [id]);
+
     const handleSave = async () => {
         setSaved((prevState) => !prevState)
         const response = await fetch(`/${id}/bookmark`, {
@@ -68,32 +82,6 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             console.error("Failed to bookmark post");
         }
     };
-    const handlePurchase = async () => {
-        console.log("Add to cart Request")
-        setSaved((prevState) => !prevState)
-        const response = await fetch(`/add_to_cart`,
-            {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({id})
-            }
-
-        );
-
-        if (response.ok) {
-            console.log("Item added to cart successfully");
-            const data = await response.json();
-
-            setIsInCart((prev) => !prev);
-            
-
-        } else {
-            console.error("Failed to add item to cart");
-        }
-    }
 
     const handleDelete = async () => {
         console.log("Received ID in Post:", id);
@@ -115,21 +103,57 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         }
     };
 
+   
+
+    const handleCartUpdate = async () => {
+        try{
+            const response = await fetch('/updateCart',
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({id, action: isInCart ? 'remove' : 'add' })
+                }
+    
+            );
+    
+            if (response.ok) {
+                console.log("Item added/removed from cart successfully");
+                const {inCart} = await response.json();
+                setIsInCart(inCart);
+                localStorage.setItem(`cart-${id}`, JSON.stringify(inCart));
+                window.dispatchEvent(new CustomEvent('cartUpdated', { detail: { id, inCart } }));
+            } else {
+                console.error("Failed to update item in cart");
+            }
+        } catch (error){
+            console.error("Error failed to update item in cart: ", error);
+        }
+        
+    }
+
+    useEffect(() => {
+        const handleCartEvent = (event) => {
+        //     console.log('cartUpdated event received in Post.js:', event.detail);
+        //     console.log('Event ID:', event.detail.id, 'Post ID:', id);
+            if (String(event.detail.id) == String(id)) {
+                setIsInCart(event.detail.inCart);
+                localStorage.setItem(`cart-${id}`, JSON.stringify(event.detail.inCart));
+                
+            }
+        };
+
+        window.addEventListener('cartUpdated', handleCartEvent);
+        
+    }, [id]);
+
+
     if (isDeleted) {
         return null;
     }
-    const addToCart = (id) => {
-        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
-        cartState.push(id);
-        return cartState;
-    };
-
-
-    const removeFromCart = (id) => {
-        const cartState = JSON.parse(localStorage.getItem("cart")) || [];
-        const updatedCartState = cartState.filter((item) => item !== id);
-        return updatedCartState;
-    };
+    
     return (
         <div className={`card-custom card mb-0 ${isDark ? "dark-mode" : "light-mode"}`} style={styles} onClick={() => handleClick(index)}>
             <div className="container-fluid ps-3 my-2 d-flex justify-content-between">
@@ -158,7 +182,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             <div className="d-flex justify-content-between p-2 align-items-center mt-2 mx-2">
                 <h6 className="card-title m-0 ps-1"> <strong> {title} </strong> </h6>
                 <div>
-                <button className={`btn bi bi-cart ${isDark ? "dark-mode" : "light-mode"}`} onClick={handlePurchase}></button>
+                <button className={`${isInCart ? 'btn bi bi-cart-check-fill' : 'btn bi bi-cart'} ${isDark ? "dark-mode" : "light-mode"}`} onClick={handleCartUpdate}></button>
                     <button className={`${isBookmarked ? "btn bi bi-bookmark-check-fill" : "btn bi bi-bookmark"} ${isDark ? "dark-mode" : "light-mode"}`}
                         onClick={handleSave}></button>
                     <span className="ms-1">{bookmarkCount}</span>

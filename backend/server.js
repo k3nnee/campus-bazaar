@@ -62,9 +62,16 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    if (req.path === '/webhook') {
+        next(); 
+    } else {
+        express.json()(req, res, next); 
+    }
+});
 app.use(dos_protection);
 app.use(cookieParser());
-app.use(express.json());
+// app.use(express.json());
 app.use("/", router);
 
 app.use((req, res, next) => {
