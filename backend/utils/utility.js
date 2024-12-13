@@ -3,6 +3,7 @@ dns = require("dns");
 
 function passwordValidator(password){
     const minLen = 8;
+    const maxLen = 30;
     const containUpperCase = /[A-Z]/.test(password);
     const containLowerCase = /[a-z]/.test(password);
     const containNum = /\d/.test(password);
@@ -10,7 +11,7 @@ function passwordValidator(password){
     console.log("__",password,"__")
     console.log(containSpecialChar)
 
-    const isValid = password.length >= minLen && containLowerCase && containUpperCase && containSpecialChar
+    const isValid = password.length >= minLen && containLowerCase && containUpperCase && containSpecialChar && password.length <= maxLen
         && containNum && containSpecialChar;
 
     if(password != null && isValid == false){
@@ -23,6 +24,11 @@ function passwordValidator(password){
 function emailValidator(email, callback){
     return new Promise((resolve) => {
         const htmlTags = /<[^>]*>/g;
+
+        if(email.length >= 41){
+            resolve(false)
+            return
+        }
 
         if(email.indexOf('.') == 0 || email.match(htmlTags)){
             console.log("has html tags\n")

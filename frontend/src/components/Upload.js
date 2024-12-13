@@ -42,39 +42,42 @@ const Upload = (prop) => {
     const validateTitle = (value) => {
         if (value.length < 5 || value.length > 100) {
             setTitleError("*Title must be between 5-100 characters");
+            return false;
         } else {
-            setTitleError(''); 
+            setTitleError('');
+            return true;
         }
     };
     const validatePrice = (value) => {
         const parsedPrice = parseFloat(value);
         const isTwoDecimals = /^\d+(\.\d{1,2})?$/.test(value);  
         if (!isTwoDecimals || parsedPrice <= 0) {
-            setPriceError("*Price must be a positive value with up to two decimal places");
+            setPriceError((prevState) => "*Price must be a positive value with up to two decimal places");
+            return false;
         } else {
-            
-            setPriceError(''); 
+            setPriceError('');
+            return true;
         }
     };
-    
-    
-    
+
     const validateDescription = (value) => {
         if (value.length > 500 || value.length < 20) {
-            setDescriptionError("*Description must be between 20-500 characters");
+            setDescriptionError((prevState) => "*Description must be between 20-500 characters")
+            return false;
         } else {
-            
-            setDescriptionError(''); 
+            setDescriptionError('');
+            return true;
         }
     };
-    const validateImage = () => {
-        if (!image) {
-            setImageError("*Please upload an image");
-            return;
-        } else {
-            setImageError(''); 
-        }
-    };
+    // const validateImage = () => {
+    //     if (!image) {
+    //         setImageError((prevState) => "*Please upload an image");
+    //         return;
+    //     } else {
+    //         setImageError('');
+    //         return true;
+    //     }
+    // };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -82,15 +85,18 @@ const Upload = (prop) => {
         if (imageError || !image) {
             return
         }
-        validateTitle(title);
-        validatePrice(price);
-        validateDescription(description);
 
         const newShakeFields = [];
-        if (titleError) newShakeFields.push('title');
-        if (priceError) newShakeFields.push('price');
-        if (descriptionError) newShakeFields.push('description');
-        // if (imageError) newShakeFields.push('image');
+
+        if(!validateTitle(title)){
+            newShakeFields.push('title');
+        }
+        if(!validatePrice(price)){
+            newShakeFields.push('price');
+        }
+        if(!validateDescription(description)) {
+            newShakeFields.push('description');
+        }
 
         if (newShakeFields.length > 0) {
             setShakeFields(newShakeFields);
