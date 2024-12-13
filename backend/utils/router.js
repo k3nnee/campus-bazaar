@@ -4,6 +4,7 @@ const { displayPost, handleGetBookmarkCount } = require("../controller/controlle
 express = require("express")
 controller = require("../controller/controller.js")
 multer = require("multer")
+const bodyParser = require('body-parser');
 
 
 const router = express.Router();
@@ -19,9 +20,12 @@ router.post("/:id/bookmark",controller.handleBookmark);
 router.get('/:id/bookmark-count', handleGetBookmarkCount);
 router.get("/bookmarked-posts", controller.handleGetBookmarkedPosts);
 router.post("/logout", controller.handleLogout);
-router.post("/add_to_cart",controller.handleAddToCart);
-router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload)
+router.get("/showCart", controller.displayCart);
+router.post("/updateCart", controller.handleUpdateCart);
+router.post("/profile",upload.single("profilePic"), controller.handleProfileUpload);
 router.get("/profile-pic", controller.handleGetProfilePic);
 router.get("/user-posts", controller.handleGetUserPosts);
+router.post("/payment", controller.handlePayment);
+router.post("/webhook", bodyParser.raw({type: 'application/json'}), controller.handleStripeWH);
 
 module.exports = router;

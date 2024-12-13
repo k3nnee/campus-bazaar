@@ -10,6 +10,8 @@ const crypto = require("crypto");
 const sanitizeHtml = require('sanitize-html');
 const { ObjectId } = require("mongodb");
 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 require("dotenv").config()
 
 const jwtSecret = process.env.JWT_SECRET_KEY;
@@ -220,19 +222,7 @@ const handleDeletePost = async (req, res) => {
     }
 
 }
-const check_in_cart = async (req,res) => {
-    res.setHeader('Cache-Control', 'no-store, no-cache');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
-    const curr_user = await userCollection.findOne({ token });
-    const { id } = req.body;
-    const post = await postCollection.findOne({ _id: new ObjectId(c.id) });
-    if (post){
-        console.log("Item is already in cart, button should display REMOVE");
-    }else{
-        console.log("ITEM IS NOT IN CART , button should display add to cart");
-    }
-}
+
 const displayCart = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -255,9 +245,11 @@ const displayCart = async (req, res) => {
                     price: post.parsed_price,
                     image: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null,
                     sellerPic: sellerProfileImg ? `data:image/jpeg;base64,${sellerProfileImg.toString('base64')}` : null,
+                    email: post.email
                 };
 
                 cart_list.push(item);
+                
             } else {
                 console.error(`Post with ID ${cartItem.id} not found.`);
             }
@@ -269,35 +261,28 @@ const displayCart = async (req, res) => {
     }
 };
 
-const handleAddToCart = async (req,res) => {
+const handleUpdateCart = async (req,res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    const { id } = req.body;
-
-
-    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex");
     
-    const curr_user = await userCollection.findOne({token});
-    const post = await postCollection.findOne({ _id: new ObjectId(id) });
-    const curr_email  = curr_user.email;
-    console.log("ATTEMPTING TO ADD TO CART");
-    const user = await userCollection.findOne({ email: curr_email });
-    const isInCart = user.cart.includes(id);
-        if (isInCart){
-        console.log("...Removing Fromhasdsddasd Cart...")
+    const token = crypto.createHash("sha256").update(req.cookies["authToken"]).digest("hex"); 
+    const curr_user = await userCollection.findOne({token});const curr_email  = curr_user.email;
+    const { id, action } = req.body;
+
+    if (action == 'remove'){
         await userCollection.findOneAndUpdate(
             { email: curr_email },
-            { $pull: { cart:  id  } }
+            { $pull: { cart:  new ObjectId(id)  }}
         );
-        res.status(200).json({ message: 'Item removed from cart' });
-    }else{
-    console.log("BEEP BOOP ADDING TO CART")
-    await userCollection.findOneAndUpdate(
-        { email: curr_email },
-        { $addToSet: { cart: id } }
-        
-    );
-    res.status(200).json({ message: 'Item added to cart' });
+        console.log("Item removed from cart");
+        res.status(200).json({ message: 'Item removed from cart', inCart : false});
+    }else if(action == 'add'){
+        await userCollection.findOneAndUpdate(
+            { email: curr_email },
+            { $addToSet: { cart: new ObjectId(id) } }
+            
+        );console.log("Item added to cart");
+        res.status(200).json({ message: 'Item added to cart', inCart: true});
     }
 }
 
@@ -483,11 +468,96 @@ const handleGetProfilePic= async (req, res) => {
     res.status(200).json({ profilePicUrl });
 };
 
+const handlePayment = async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    const { items } = req.body; 
+    console.log("Creating Stripe checkout session with items:", items);
+
+    const totalAmount = items.reduce((total, item) => total + item.price, 0);
+    if (totalAmount > 999999.99) {
+        console.log("total exceeds threshold")
+        return res.status(400).json({ message: "Your total amount exceeds $999,999.99 Please reduce your cart items or place multiple orders. Save your wallets ಠ_ಠ" });
+    }
+
+    try {
+        const metadata = {};
+        items.forEach((item, index) => {
+            metadata[`item${index}`] = item.id.toString();
+        });
+
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: items.map(item => {
+                return {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: item.name
+                        },
+                        unit_amount: item.price * 100, 
+                    },
+                    quantity: 1,
+
+                };
+            }),
+            mode: 'payment',
+            success_url: `${req.headers.origin}`,
+            cancel_url: `${req.headers.origin}/cart`,
+            metadata: metadata
+        });
+        console.log("session url : ", session.url);
+
+        res.status(200).json({ url: session.url });
+    
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const handleStripeWH = async (req, res) => {
+    const sig = req.headers['stripe-signature'];
+    let event;
+
+    console.log('Raw Body type: ', typeof req.body);
+    // console.log('Raw Body (string): ', req.body.toString());
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        console.log('Event:', event);
+    } catch (err) {
+        return res.status(400).send(`Webhook Event Error: ${err.message}`);
+    }
+
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        const items = session.metadata; 
+
+        try {
+            for (const item of Object.keys(items)) {
+                const itemId = items[item];
+                await postCollection.deleteOne({ _id: new ObjectId(itemId) });
+                await userCollection.updateOne(
+                    { cart: itemId },
+                    { $pull: { cart: new ObjectId(itemId) } }
+                );
+                console.log(`Item with ID ${itemId} cleared from cart and deleted from database.`);
+            }
+        } catch (error) {
+            console.error(`Failed to clear cart or delete item:`, error);
+        }
+    }
+    res.json({ message: "Webhook was processed", received: true });
+
+};
+
+
 
 module.exports = {
     
     displayCart,
-    handleAddToCart,
+    handleUpdateCart,
     handleLogin,
     handleRegister,
     handleUpload,
@@ -500,5 +570,7 @@ module.exports = {
     handleGetUserPosts,
     handleLogout,
     handleProfileUpload,
-    handleGetProfilePic
+    handleGetProfilePic,
+    handlePayment, 
+    handleStripeWH
 }
