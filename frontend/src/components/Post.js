@@ -34,31 +34,6 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         }
     }, [isInCart, id]);
 
-    useEffect(() => {
-        const fetchBookmarkData = async () => {
-            try {
-                const response = await fetch(`/${id}/bookmark-count`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setBookmarkCount(data.bookmarkCount);
-                    setIsBookmarked(data.isBookmarked);
-                } else {
-                    console.error("Failed to fetch bookmark count");
-                }
-            } catch (error) {
-                console.error("Error fetching bookmark count:", error);
-            }
-        };
-
-        fetchBookmarkData();
-    }, [id]);
-
     const handleSave = async () => {
         const response = await fetch(`/${id}/bookmark`, {
             method: 'POST',
