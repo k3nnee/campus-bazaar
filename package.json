@@ -26,6 +26,7 @@
     "react-router-dom": "^6.27.0",
     "sanitize-html": "^2.13.1",
     "socket.io": "^4.8.1",
+    "stripe": "^17.4.0",
     "uppy": "^4.5.0"
   }
 }

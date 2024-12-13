@@ -62,9 +62,16 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    if (req.path === '/webhook') {
+        next(); 
+    } else {
+        express.json()(req, res, next); 
+    }
+});
 app.use(dos_protection);
 app.use(cookieParser());
-app.use(express.json());
+// app.use(express.json());
 app.use("/", router);
 
 app.use((req, res, next) => {
@@ -140,6 +147,26 @@ wss.on("connect", async (socket) => {
             description: data.description,
             email: data.email
         };
+
+        if (data.hour < 0 || data.hour > 24){
+            socket.emit("upload_response", { error: "Invalid time" })
+            return;
+        }
+
+        if (data.minute < 0 || data.minute > 60){
+            socket.emit("upload_response", { error: "Invalid time" })
+            return;
+        }
+
+        if (data.second < 0 || data.second > 60){
+            socket.emit("upload_response", { error: "Invalid time" })
+            return;
+        }
+
+        if (data.price > 999999999.99){
+            socket.emit("upload_response", { error: "Invalid price" })
+            return;
+        }
 
         const time = new Date(Date.now() + (data.hour * 60 * 60 * 1000) + (data.minute * 60 * 1000) + (data.second * 1000));
         agenda.schedule(time, 'post content', { jobData });

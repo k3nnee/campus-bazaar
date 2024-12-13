@@ -1,7 +1,7 @@
 import InfiniteFlatList from "./InfiniteFlatList";
 import DesktopUI from "./DesktopUI";
 import {useEffect, useState} from "react";
-const Body = ({isDark}) => {
+const Body = ({isDark, user}) => {
     const windowDimension = window.innerWidth;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -9,9 +9,16 @@ const Body = ({isDark}) => {
 
     useEffect( () => {
         const fetchPosts = async () => {
+            console.log(user);
             try {
                 setLoading(true)
-                const response = await fetch("/posts");
+                const response = await fetch("/posts", {
+                    method: "POST",
+                    body: JSON.stringify({email: user}),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
                 if (!response.ok) {
                     throw new Error("Failed to fetch posts");
                 }
@@ -36,6 +43,8 @@ const Body = ({isDark}) => {
             </div>
         )
     }
+
+    console.log(data)
 
     return (
         <div className={`position-relative body-content ${isDark ? "dark-mode" : "light-mode"}`}>

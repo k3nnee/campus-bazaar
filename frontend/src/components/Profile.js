@@ -178,6 +178,8 @@ const Profile = (prop) => {
                                         profilePic_url={post.profilePic_url}
                                         isDark={prop.isDark}
                                         handleClick={() => {}}
+                                        isBookmark={true}
+                                        bookmarkCounter={post.bookmarkCount}
                                     />
                                     
                                 </div>
@@ -199,6 +201,8 @@ const Profile = (prop) => {
                                         profilePic_url={post.profilePic_url}
                                         isDark={prop.isDark}
                                         handleClick={() => {}}
+                                        bookmarkCounter={post.bookmarkCount}
+                                        isBookmark={post.bookmarkedBy.includes(prop.user)}
                                     />
                                 </div>
                             ))
