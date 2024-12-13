@@ -9,8 +9,6 @@ const postCollection = database.collection("post");
 const crypto = require("crypto");
 const sanitizeHtml = require('sanitize-html');
 const { ObjectId } = require("mongodb");
-const { time } = require("console");
-const { title } = require("process");
 
 require("dotenv").config()
 
