@@ -34,7 +34,6 @@ const Signup = ({isDark}) => {
     const handleResponse = (data) => {
         if("message" in data){
             window.location.href = "/"
-            alert("Registered successfully! Please sign in with the credentials! :)")
         }else{
             return (
                 alert(data.error)
