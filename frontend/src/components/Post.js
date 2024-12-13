@@ -7,16 +7,13 @@ const styles = {
 }
 
 
-const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, isDark}) => {
+const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, isDark, isBookmark, bookmarkCounter}) => {
     const [saved, setSaved] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
-    const [bookmarkCount, setBookmarkCount] = useState(0);
-    const [isBookmarked, setIsBookmarked] = useState(() => {
-        const savedStatus = localStorage.getItem(`isBookmarked-${id}`);
-        return savedStatus ? JSON.parse(savedStatus) : false;
-    });
+    const [bookmarkCount, setBookmarkCount] = useState(bookmarkCounter);
+    const [isBookmarked, setIsBookmarked] = useState(isBookmark);
     const [isInCart, setIsInCart] = useState(false);
- 
+
     useEffect(() => {
         localStorage.setItem(`isBookmarked-${id}`, JSON.stringify(isBookmarked));
     }, [isBookmarked, id]);
@@ -24,32 +21,8 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
         const cartState = JSON.parse(localStorage.getItem("cart")) || [];
         setIsInCart(cartState.includes(id));
     }, [id]);
-    useEffect(() => {
-        const fetchBookmarkData = async () => {
-            try {
-                const response = await fetch(`/${id}/bookmark-count`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setBookmarkCount(data.bookmarkCount);
-                    setIsBookmarked(data.isBookmarked);
-                } else {
-                    console.error("Failed to fetch bookmark count");
-                }
-            } catch (error) {
-                console.error("Error fetching bookmark count:", error);
-            }
-        };
 
-        fetchBookmarkData();
-    }, [id]);
     const handleSave = async () => {
-        setSaved((prevState) => !prevState)
         const response = await fetch(`/${id}/bookmark`, {
             method: 'POST',
             credentials: 'include',
@@ -61,8 +34,7 @@ const Post = ({ id, title, imageUrl, email, handleClick, index, profilePic_url, 
             const data = await response.json();
  
             setBookmarkCount(data.bookmarkCount);  
-            setIsBookmarked(!isBookmarked);  
- 
+            setIsBookmarked(!isBookmarked);
         }
         else{
             console.error("Failed to bookmark post");

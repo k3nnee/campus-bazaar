@@ -143,14 +143,14 @@ const displayPost = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     try {
-        const {email} = req.body;
+        const email = req.body.email;
         const posts = await postCollection.find().sort({ "createdAt": -1 }).toArray();
-        const user = await userCollection.findOne({"email": email});
         // console.log("user *****: ", user);
         const formattedPosts = await Promise.all(posts.map(async post => {
             const user = await userCollection.findOne({ "email": post.email });
             return {
                 ...post,
+                isBookmarked: post.bookmarkedBy.includes(email),
                 id: post._id,
                 imageUrl: post.image ? `data:image/jpeg;base64,${post.image.toString('base64')}` : null,
                 profilePic_url: user && user.profilePic ? `data:image/jpeg;base64,${user.profilePic.toString('base64')}` : null
@@ -270,8 +270,6 @@ const displayCart = async (req, res) => {
         res.json([]);
     }
 };
- 
- 
 
 const handleAddToCart = async (req,res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
@@ -302,8 +300,9 @@ const handleAddToCart = async (req,res) => {
         
     );
     res.status(200).json({ message: 'Item added to cart' });
+    }
 }
-}
+
 const handleBookmark = async (req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache');
     res.setHeader('X-Content-Type-Options', 'nosniff');

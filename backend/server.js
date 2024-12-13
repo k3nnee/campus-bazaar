@@ -141,6 +141,18 @@ wss.on("connect", async (socket) => {
             email: data.email
         };
 
+        if (data.hour < 0 || data.hour > 24){
+            socket.emit("upload_response", { error: "Invalid time" })
+        }
+
+        if (data.minute < 0 || data.minute > 60){
+            socket.emit("upload_response", { error: "Invalid time" })
+        }
+
+        if (data.second < 0 || data.second > 60){
+            socket.emit("upload_response", { error: "Invalid time" })
+        }
+
         const time = new Date(Date.now() + (data.hour * 60 * 60 * 1000) + (data.minute * 60 * 1000) + (data.second * 1000));
         agenda.schedule(time, 'post content', { jobData });
 

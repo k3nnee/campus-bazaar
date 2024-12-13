@@ -9,7 +9,7 @@ multer = require("multer")
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.get("/posts",controller.displayPost);
+router.post("/posts",controller.displayPost);
 router.post("/register", controller.handleRegister);
 router.post("/login", controller.handleLogin);
 router.post("/upload", upload.single("image"), controller.handleUpload);

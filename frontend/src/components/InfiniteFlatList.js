@@ -29,6 +29,8 @@ const InfiniteFlatList = ({data, setHighlight, isDark}) => {
                                     bookmarkedBy = {item.bookmarkedBy}
                                     profilePic_url={item.profilePic_url}
                                     isDark={isDark}
+                                    isBookmark={item.isBookmarked}
+                                    bookmarkCounter={item.bookmarkCount}
                                 />
                             </div>
                         ))
